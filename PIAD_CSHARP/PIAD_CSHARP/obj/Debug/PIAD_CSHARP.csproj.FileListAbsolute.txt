@@ -1,0 +1,8 @@
+c:\users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CSHARP\PIAD_CSHARP\bin\Debug\PIAD_CSHARP.exe
+c:\users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CSHARP\PIAD_CSHARP\bin\Debug\PIAD_CSHARP.pdb
+c:\users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CSHARP\PIAD_CSHARP\obj\Debug\PIAD_CSHARP.csprojResolveAssemblyReference.cache
+c:\users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CSHARP\PIAD_CSHARP\obj\Debug\PIAD_CSHARP.Form1.resources
+c:\users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CSHARP\PIAD_CSHARP\obj\Debug\PIAD_CSHARP.Properties.Resources.resources
+c:\users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CSHARP\PIAD_CSHARP\obj\Debug\PIAD_CSHARP.csproj.GenerateResource.Cache
+c:\users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CSHARP\PIAD_CSHARP\obj\Debug\PIAD_CSHARP.exe
+c:\users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CSHARP\PIAD_CSHARP\obj\Debug\PIAD_CSHARP.pdb

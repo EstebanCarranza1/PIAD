@@ -1,0 +1,7 @@
+﻿  main.cpp
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp\piad_cpp\controls.h(31): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp\piad_cpp\main.cpp(47): warning C4302: 'conversión de tipo': truncamiento de 'LPWSTR' a 'WORD'
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp\piad_cpp\main.cpp(52): warning C4302: 'conversión de tipo': truncamiento de 'LPWSTR' a 'WORD'
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp\piad_cpp\main.cpp(250): warning C4101: 'rc': variable local sin referencia
+  PIAD_CPP.vcxproj -> C:\Users\esteban.carranza\Documents\Visual Studio 2015\Projects\PIAD_CPP\Debug\PIAD_CPP.exe
+  PIAD_CPP.vcxproj -> C:\Users\esteban.carranza\Documents\Visual Studio 2015\Projects\PIAD_CPP\Debug\PIAD_CPP.pdb (Full PDB)

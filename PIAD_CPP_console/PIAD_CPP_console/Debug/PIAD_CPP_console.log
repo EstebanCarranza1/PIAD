@@ -1,0 +1,12 @@
+﻿  main.cpp
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(12): warning C4091: 'static ': se ha omitido a la izquierda de 'filtros::F_GRAY_SCALE' cuando no hay ninguna variable declarada
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(55): warning C4091: 'static ': se ha omitido a la izquierda de 'filtros::F_RGB' cuando no hay ninguna variable declarada
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(87): warning C4091: 'static ': se ha omitido a la izquierda de 'filtros::F_MEDIA' cuando no hay ninguna variable declarada
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(88): warning C4091: 'static ': se ha omitido a la izquierda de 'filtros' cuando no hay ninguna variable declarada
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(42): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(48): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(49): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(50): warning C4244: '=': conversión de 'double' a 'float'; posible pérdida de datos
+c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_cpp_console\piad_cpp_console\filtros.h(85): warning C4244: 'return': conversión de 'float' a 'int'; posible pérdida de datos
+  PIAD_CPP_console.vcxproj -> C:\Users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CPP_console\Debug\PIAD_CPP_console.exe
+  PIAD_CPP_console.vcxproj -> C:\Users\esteban.carranza\documents\visual studio 2015\Projects\PIAD_CPP_console\Debug\PIAD_CPP_console.pdb (Full PDB)
