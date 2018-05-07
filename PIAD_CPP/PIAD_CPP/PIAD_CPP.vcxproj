@@ -150,9 +150,33 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="controls.h" />
+    <ClInclude Include="convert.h" />
+    <ClInclude Include="ctrl_dbx_filtros.h" />
+    <ClInclude Include="ctrl_dbx_menu.h" />
+    <ClInclude Include="dbx_filtros.h" />
+    <ClInclude Include="e1.h" />
+    <ClInclude Include="e2.h" />
+    <ClInclude Include="e3.h" />
+    <ClInclude Include="e4.h" />
+    <ClInclude Include="e5.h" />
+    <ClInclude Include="ejemplos.h" />
+    <ClInclude Include="formatos.h" />
+    <ClInclude Include="Image.h" />
+    <ClInclude Include="OpenFileDialog.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="tabName.h" />
     <ClInclude Include="ventana.h" />
+    <ClInclude Include="v_tbc_main.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PIAD_CPP.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="PIAD_CPP.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

@@ -1,17 +1,21 @@
 // GT_HelloWorldWin32.cpp  
 // compile with: /D_UNICODE /DUNICODE /DWIN32 /D_WINDOWS /c  
 
-#define DAYS_IN_WEEK 7
-#define IDS_SUNDAY 1
+
 #include <windows.h>  
 #include <stdlib.h>  
 #include <string.h>  
 #include <tchar.h>  
+#include "convert.h"
 #include "controls.h"
-#include <Commctrl.h>
 #include <windowsx.h>
+#include "v_tbc_main.h";
+#include "resource.h"
+#include "ctrl_dbx_filtros.h"
+#include "ctrl_dbx_menu.h"
 
 #pragma comment (lib, "Comctl32.lib")
+
 
 // Global variables  
 /*HWND DoCreateTabControl(HWND);
@@ -26,9 +30,30 @@ static TCHAR szTitle[] = _T("Win32 Guided Tour Application");
 
 HINSTANCE hInst;
 HWND DoCreateTabControl(HWND);
+HWND TabControl01;
+#define btnIrA 100
 // Forward declarations of functions included in this code module:  
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
+// <> DIALOGO_1
+HINSTANCE dbx_dialogo1;
+LRESULT CALLBACK call_dialog1(HWND, UINT, WPARAM, LPARAM);
+//</> DIALOGO_1
+
+//
+	
+//
+
+int CALLBACK WinMain(
+	_In_ HINSTANCE hInstance,
+	_In_ HINSTANCE hPrevInstance,
+	_In_ LPSTR     lpCmdLine,
+	_In_ int       nCmdShow)
+{
+	DialogBox(dbx_menu.hInst, MAKEINTRESOURCE(DBX_MENU), NULL, reinterpret_cast<DLGPROC>(call_menu));
+	return 0;
+}
+/* 
 int CALLBACK WinMain(
 	_In_ HINSTANCE hInstance,
 	_In_ HINSTANCE hPrevInstance,
@@ -78,7 +103,7 @@ int CALLBACK WinMain(
 		szTitle,
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, CW_USEDEFAULT,
-		500, 100,
+		500, 500,
 		NULL,
 		NULL,
 		hInstance,
@@ -104,7 +129,7 @@ int CALLBACK WinMain(
 
 	//_objects::button *btnHola = new _objects::button(&hWnd, L"Hola", 0, 0, 617, 43);
 	//_objects::button *btnOtro = new _objects::button(&hWnd, L"otro", 10, 10, 100, 50);
-	DoCreateTabControl(hWnd);
+	TabControl01 = DoCreateTabControl(hWnd, hInst);
 	//btnHola.crear(&hWnd, L"hola");
 
 	// Main message loop:  
@@ -135,6 +160,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
+	case WM_CREATE:
+	{
+		HWND hwndButton = CreateWindow(
+			L"BUTTON",  // Predefined class; Unicode assumed 
+			L"OK",      // Button text 
+			WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
+			10,         // x position 
+			10,         // y position 
+			100,        // Button width
+			100,        // Button height
+			hWnd,     // Parent window
+			(HMENU)btnIrA,       // No menu.
+			hInst,
+			NULL);      // Pointer not needed.
+
+		
+	}
+	break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
 
@@ -151,6 +194,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_DESTROY:
 		PostQuitMessage(0);
 		break;
+
+	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+			case btnIrA:
+			{
+				//DialogBox(dbx_dialogo1, MAKEINTRESOURCE(DBX_TEST), hWnd, reinterpret_cast<DLGPROC>(call_dialog1));	
+				DialogBox(dbx_menu.hInst, MAKEINTRESOURCE(DBX_MENU), hWnd, reinterpret_cast<DLGPROC>(call_menu));
+			}
+			break;
+		}
+	break;
+	
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
 		break;
@@ -158,146 +214,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
+*/
 
-///--------------------------------------------------------------------------
-
-
-// Creates a tab control, sized to fit the specified parent window's client
-//   area, and adds some tabs. 
-// Returns the handle to the tab control. 
-// hwndParent - parent window (the application's main window). 
-// 
-
-
-HWND DoCreateTabControl(HWND hwndParent)
-{
-	
-	RECT rcClient;
-	INITCOMMONCONTROLSEX icex;
-	HWND hwndTab;
-	TCITEM tie;
-	int i;
-	TCHAR achTemp[256];  // Temporary buffer for strings.
-
-						 // Initialize common controls.
-	icex.dwSize = sizeof(INITCOMMONCONTROLSEX);
-	icex.dwICC = ICC_TAB_CLASSES;
-	InitCommonControlsEx(&icex);
-
-	
-	// Get the dimensions of the parent window's client area, and 
-	// create a tab control child window of that size. Note that g_hInst
-	// is the global instance handle.
-	GetClientRect(hwndParent, &rcClient);
-	hwndTab = CreateWindow(WC_TABCONTROL, L"",
-		WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE,
-		0, 0, rcClient.right, rcClient.bottom,
-		hwndParent, NULL, hInst, NULL);
-	if (hwndTab == NULL)
-	{
-		return NULL;
-	}
-
-	// Add tabs for each day of the week. 
-	tie.mask = TCIF_TEXT | TCIF_IMAGE;
-	tie.iImage = -1;
-	//achTemp = ("Hola");
-	tie.pszText = achTemp;
-	
-	for (i = 0; i < 2; i++)
-	{
-		// Load the day string from the string resources. Note that
-		// g_hInst is the global instance handle.
-		LoadString(hInst, IDS_SUNDAY + i,
-			achTemp, sizeof(achTemp) / sizeof(achTemp[0]));
-		if (TabCtrl_InsertItem(hwndTab, i, &tie) == -1)
-		{
-			DestroyWindow(hwndTab);
-			return NULL;
-		}
-	}
-	return hwndTab;
-	
-
-}
-
-// Creates a child window (a static control) to occupy the tab control's 
-//   display area. 
-// Returns the handle to the static control. 
-// hwndTab - handle of the tab control. 
-// 
-HWND DoCreateDisplayWindow(HWND hwndTab)
-{
-	
-	HWND hwndStatic = CreateWindow(WC_STATIC, L"",
-		WS_CHILD | WS_VISIBLE | WS_BORDER,
-		100, 100, 100, 100,        // Position and dimensions; example only.
-		hwndTab, NULL, hInst,    // g_hInst is the global instance handle
-		NULL);
-	return hwndStatic;
-	
-}
-
-// Handles the WM_SIZE message for the main window by resizing the 
-//   tab control. 
-// hwndTab - handle of the tab control.
-// lParam - the lParam parameter of the WM_SIZE message.
-//
-
-
-HRESULT OnSize(HWND hwndTab, LPARAM lParam)
-{
-	
-	RECT rc;
-
-	if (hwndTab == NULL)
-		return E_INVALIDARG;
-
-	// Resize the tab control to fit the client are of main window.
-	if (!SetWindowPos(hwndTab, HWND_TOP, 0, 0, GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam), SWP_SHOWWINDOW))
-		return E_FAIL;
-
-	return S_OK;
-	
-}
-
-// Handles notifications from the tab control, as follows: 
-//   TCN_SELCHANGING - always returns FALSE to allow the user to select a 
-//     different tab.  
-//   TCN_SELCHANGE - loads a string resource and displays it in a static 
-//     control on the selected tab.
-// hwndTab - handle of the tab control.
-// hwndDisplay - handle of the static control. 
-// lParam - the lParam parameter of the WM_NOTIFY message.
-//
-
-BOOL OnNotify(HWND hwndTab, HWND hwndDisplay, LPARAM lParam)
-{
-	
-	TCHAR achTemp[256]; // temporary buffer for strings
-
-	switch (((LPNMHDR)lParam)->code)
-	{
-	case TCN_SELCHANGING:
-	{
-		// Return FALSE to allow the selection to change.
-		return FALSE;
-	}
-
-	case TCN_SELCHANGE:
-	{
-		int iPage = TabCtrl_GetCurSel(hwndTab);
-
-		// Note that g_hInst is the global instance handle.
-		LoadString(hInst, IDS_SUNDAY + iPage, achTemp,
-			sizeof(achTemp) / sizeof(achTemp[0]));
-		LRESULT result = SendMessage(hwndDisplay, WM_SETTEXT, 0,
-			(LPARAM)achTemp);
-		break;
-	}
-	}
-	return TRUE;
-	
-	//return 0;
-}
 

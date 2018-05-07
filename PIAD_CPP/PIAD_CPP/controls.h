@@ -1,6 +1,7 @@
 #include <Windows.h>
 #ifndef objects
 #define objects
+/*
 class _objects
 {
 public :
@@ -45,5 +46,5 @@ public :
 		
 	};
 };
-
+*/
 #endif // !_controls
