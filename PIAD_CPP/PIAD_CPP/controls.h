@@ -1,6 +1,9 @@
 #include <Windows.h>
+#include "dbx_filtros.h"
 #ifndef objects
 #define objects
+mod_dialogBox dbx_menu, dbx_filtrado, dbx_conteo;
+
 /*
 class _objects
 {

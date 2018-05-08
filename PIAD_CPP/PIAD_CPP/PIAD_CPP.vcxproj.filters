@@ -89,6 +89,15 @@
     <ClInclude Include="ejemplos.h">
       <Filter>Archivos de código fuente\ejemplos</Filter>
     </ClInclude>
+    <ClInclude Include="mod.picture.h">
+      <Filter>Archivos de código fuente\model</Filter>
+    </ClInclude>
+    <ClInclude Include="ctrl_dbx_conteo.h">
+      <Filter>Archivos de código fuente\control</Filter>
+    </ClInclude>
+    <ClInclude Include="guardar_imagen.h">
+      <Filter>Archivos de código fuente\control</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PIAD_CPP.rc">

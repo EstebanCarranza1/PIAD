@@ -4,8 +4,9 @@
 #include "convert.h"
 #include "dbx_filtros.h"
 #include "ejemplos.h"
-dbx_filtros::picture picMenu;
-dbx_filtros::dbx dbx_menu;
+#include "mod.picture.h"
+mod_picture picMenu;
+
 
 
 LRESULT CALLBACK call_menu(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -28,19 +29,29 @@ LRESULT CALLBACK call_menu(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 	}
 	break;
+	case WM_CLOSE:
+		exit(0);
+	break;
 	case WM_COMMAND:
 	{
 		switch (LOWORD(wParam))
 		{
 			case BTN_FILTROS:
-				DialogBox(dbx_filtrado.hInst, MAKEINTRESOURCE(DBX_TEST), NULL, reinterpret_cast<DLGPROC>(call_filtrado));
+				DialogBox(dbx_filtrado.hInst, MAKEINTRESOURCE(DBX_TEST), hWnd, reinterpret_cast<DLGPROC>(call_filtrado));
 			break;
 			case BTN_DATOS:
-				e5();
+				//e5(hWnd, picConteo);
+			break;
+			case BTN_CONTEO:
+				DialogBox(dbx_conteo.hInst, MAKEINTRESOURCE(DBX_CONTEO), hWnd, reinterpret_cast<DLGPROC>(call_conteo));
 			break;
 			case BTN_SALIR:
 				exit(0);
 			break;
+			/*
+			case WM_CLOSE:
+				MessageBox(0, L"", L"", 0);
+			break;*/
 		}
 	}
 	break;

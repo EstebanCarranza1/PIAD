@@ -151,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="controls.h" />
     <ClInclude Include="convert.h" />
+    <ClInclude Include="ctrl_dbx_conteo.h" />
     <ClInclude Include="ctrl_dbx_filtros.h" />
     <ClInclude Include="ctrl_dbx_menu.h" />
     <ClInclude Include="dbx_filtros.h" />
@@ -161,7 +162,9 @@
     <ClInclude Include="e5.h" />
     <ClInclude Include="ejemplos.h" />
     <ClInclude Include="formatos.h" />
+    <ClInclude Include="guardar_imagen.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="mod.picture.h" />
     <ClInclude Include="OpenFileDialog.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="tabName.h" />

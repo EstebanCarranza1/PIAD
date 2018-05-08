@@ -12,7 +12,7 @@ using namespace std;
 using namespace cv;
 
 //prototipo de la funcion de captura cara y ojos
-void CaraYOjos(Mat frame, float escala);
+void CaraYOjos(Mat frame, float escala, HWND hWnd, mod_picture image);
 
 //definicion de los haarcascades
 String face_cascade_name = "haarcascade\\haarcascade_frontalface_alt.xml";
@@ -25,7 +25,7 @@ CascadeClassifier eyes_cascade;
 //nombre de la ventana
 string window_name = "Captura y deteccion de cara";
 
-void e4()
+void e4(HWND hWnd, mod_picture image)
 {
 	//Inicializamos la ventana
 	VideoCapture captura(0);
@@ -41,6 +41,8 @@ void e4()
 	if (!captura.isOpened())
 		exit(0);
 
+	
+
 	//lazo infinito de deteccion
 	while (true)
 	{
@@ -52,7 +54,7 @@ void e4()
 		//en caso de que se haya leido sin error se procesa con la funcion de cara y ojos
 		if (!frame2.empty())
 		{
-			CaraYOjos(frame2, 1);
+			CaraYOjos(frame2, 1, hWnd, image);
 		}
 		else
 		{
@@ -61,7 +63,7 @@ void e4()
 		}
 
 		int c = waitKey(10);
-		if ((char)c == 'c')
+		if ((char)c == 'c' || dbx_conteo.cerrar_dialogo)
 		{
 			break;
 		}
@@ -69,7 +71,7 @@ void e4()
 }
 
 
-void CaraYOjos(Mat frame, float escala)
+void CaraYOjos(Mat frame, float escala, HWND hWnd, mod_picture image)
 {
 	//arreglo de rectangulos de caras detectadas
 	std::vector<Rect> faces;
@@ -114,6 +116,9 @@ void CaraYOjos(Mat frame, float escala)
 			circle(frame, center, radius, Scalar(255, 0, 0), 4, 8, 0);
 		}
 	}
+
+	Mat frameX(frame, Rect(0, 0, 1, 1));
 	//muestra lo que resulta
-	imshow(window_name, frame);
+	imshow(window_name, frameX);
+	guardar::guardar_imagen(frame, hWnd, image);
 }

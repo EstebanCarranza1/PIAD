@@ -3,9 +3,9 @@
 #include "resource.h"
 #include "OpenFileDialog.h"
 #include "e1.h"
-#include "dbx_filtros.h"
-dbx_filtros::dbx dbx_filtrado;
-dbx_filtros::picture picNormal, picFiltrada;
+#include "mod.picture.h"
+
+mod_picture picNormal, picFiltrada;
 
 LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -31,6 +31,10 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		SendDlgItemMessage(hWnd, picFiltrada.id, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)picFiltrada.getImagen());
 
 	}
+	break;
+	case WM_CLOSE:
+		dbx_filtrado.cerrar_dialogo = true;
+		EndDialog(hWnd, true);
 	break;
 	case WM_COMMAND:
 	{

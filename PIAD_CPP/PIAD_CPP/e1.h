@@ -7,7 +7,8 @@
 #include <math.h>
 #include "convert.h"
 #include "dbx_filtros.h"
-
+#include "mod.picture.h"
+#include "guardar_imagen.h"
 
 #pragma comment(lib,"opencv_world310d.lib")
 
@@ -23,28 +24,9 @@ HBITMAP cambiarPic()
 	hBitmapX = (HBITMAP)LoadImage(NULL, L"C:\\DATA\\02.bmp", IMAGE_BITMAP, 640, 480, LR_LOADFROMFILE);
 	return hBitmapX;
 }
-int guardar_imagen(Mat mat, HWND hWnd, dbx_filtros::picture image)//HBITMAP hPictureBox, int SizeWidth, int SizeHeight, char pathImg[])
-{
-	vector<int> compression_params;
-	compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
-	compression_params.push_back(9);
 
-	try {
-		
-		
-		imwrite(image.pathDefault, mat, compression_params);
-		image.setImagen((HBITMAP)LoadImage(NULL, convertCharArrayToLPCWSTR(image.pathDefault), IMAGE_BITMAP, image.getSizeWidth(), image.getSizeHeight(), LR_LOADFROMFILE));
-		SendDlgItemMessage(hWnd, image.id, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)image.getImagen());
-		
-		return 0;
-	}
-	catch (runtime_error& ex) {
-		fprintf(stderr, "Exception converting image to PNG format: %s\n", ex.what());
-		return 1;
-	}
-}
 
-void start_record(HWND hWnd, dbx_filtros::picture image, dbx_filtros::picture imageFiltrada)
+void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada)
 {
 	//clase correspondiente a la camara
 	//el paraemtro dice que camara de las conectadas
@@ -56,10 +38,12 @@ void start_record(HWND hWnd, dbx_filtros::picture image, dbx_filtros::picture im
 		cout << "No se pudo abrir la camara" << endl;
 		return;
 	}
+	
 	//ciclo infinito para la lectura de la camara
 	while (1)
 	{
 		Mat frame, frame2, gris; //aqui guardaremos el frame
+		
 		bool exito = camara.read(frame); // lee un frame
 		if (!exito) //si no se pudo lastima de nuevo
 		{
@@ -98,11 +82,13 @@ void start_record(HWND hWnd, dbx_filtros::picture image, dbx_filtros::picture im
 
 		//crea la ventana y muestralo al mundo!
 		//imshow("Mi primer Video", frame2);
+		Mat frameX(frame, Rect(0, 0, 1, 1));
+		imshow("No me repruebe por hacer esto por favor :'v", frameX);
 	
 		//hBitmap = CreateBitmap(frame2.cols, frame2.rows, 0, 0, &frame2.data);
 		//cvEncodeImage(".bmp", frame2, CV_8UC1, imwrite("foto", frame2, ))
 		
-		guardar_imagen(frame2, hWnd, image);
+		guardar::guardar_imagen(frame2, hWnd, image);
 
 		//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap);
 	
@@ -110,11 +96,11 @@ void start_record(HWND hWnd, dbx_filtros::picture image, dbx_filtros::picture im
 		equalizeHist(gris, gris);
 		//imshow("Escala de gris equalizado", gris);
 
-		guardar_imagen(gris, hWnd, imageFiltrada);
+		guardar::guardar_imagen(gris, hWnd, imageFiltrada);
 
 		//imshow("Escala de gris", gris2);
 		//detecta una tecla, si es el esc entonces fuera
-		if (waitKey(16) == 27)
+		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
 		{
 			cout << "juimonos!!" << endl;
 			break;

@@ -14,7 +14,7 @@ using namespace std;
 //demo hecho por Rafael Rosas para los UltraLMAD
 int escala = 3;
 
-void e5()
+void e5(HWND hWnd, mod_picture image)
 {
 
 	cv::VideoCapture camara(0); //camara basica, si usan una muy grande
@@ -94,6 +94,7 @@ void e5()
 		if (waitKey(10) >= 40)
 			break;
 		imshow("Detector de Racita", img);
+		guardar::guardar_imagen(img, hWnd, image);
 	}
 
 }

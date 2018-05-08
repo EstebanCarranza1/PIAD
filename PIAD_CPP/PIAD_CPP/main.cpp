@@ -12,9 +12,10 @@
 #include "v_tbc_main.h";
 #include "resource.h"
 #include "ctrl_dbx_filtros.h"
+#include "ctrl_dbx_conteo.h"
 #include "ctrl_dbx_menu.h"
-
 #pragma comment (lib, "Comctl32.lib")
+
 
 
 // Global variables  
@@ -36,8 +37,8 @@ HWND TabControl01;
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
 // <> DIALOGO_1
-HINSTANCE dbx_dialogo1;
-LRESULT CALLBACK call_dialog1(HWND, UINT, WPARAM, LPARAM);
+/*HINSTANCE dbx_dialogo1;
+LRESULT CALLBACK call_dialog1(HWND, UINT, WPARAM, LPARAM);*/
 //</> DIALOGO_1
 
 //
