@@ -1,7 +1,13 @@
 ﻿  main.cpp
-c:\users\esteban.carranza\documents\github\piad\piad_cpp\piad_cpp\controls.h(31): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-c:\users\esteban.carranza\documents\github\piad\piad_cpp\piad_cpp\main.cpp(11): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-c:\users\esteban.carranza\documents\github\piad\piad_cpp\piad_cpp\v_tbc_main.h(125): warning C4101: 'rc': variable local sin referencia
-c:\users\esteban.carranza\documents\github\piad\piad_cpp\piad_cpp\main.cpp(53): warning C4302: 'conversión de tipo': truncamiento de 'LPWSTR' a 'WORD'
-c:\users\esteban.carranza\documents\github\piad\piad_cpp\piad_cpp\main.cpp(58): warning C4302: 'conversión de tipo': truncamiento de 'LPWSTR' a 'WORD'
+c:\github\piad\piad_cpp\piad_cpp\convert.h(14): warning C4018: '<': no coinciden signed/unsigned
+c:\github\piad\piad_cpp\piad_cpp\convert.h(15): warning C4244: '=': conversión de 'WCHAR' a 'char'; posible pérdida de datos
+c:\github\piad\piad_cpp\piad_cpp\main.cpp(12): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\github\piad\piad_cpp\piad_cpp\v_tbc_main.h(125): warning C4101: 'rc': variable local sin referencia
+c:\github\piad\piad_cpp\piad_cpp\guardar_imagen.h(38): warning C4091: 'static ': se ha omitido a la izquierda de 'guardar' cuando no hay ninguna variable declarada
+c:\github\piad\piad_cpp\piad_cpp\e4.h(98): warning C4018: '<': no coinciden signed/unsigned
+c:\github\piad\piad_cpp\piad_cpp\e4.h(101): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_cpp\piad_cpp\e4.h(102): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_cpp\piad_cpp\e4.h(112): warning C4018: '<': no coinciden signed/unsigned
+c:\github\piad\piad_cpp\piad_cpp\e4.h(114): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_cpp\piad_cpp\convert.h(16): warning C4172: devolución de dirección de la variable local o temporal: Char
 LINK : fatal error LNK1104: no se puede abrir el archivo 'opencv_world310d.lib'

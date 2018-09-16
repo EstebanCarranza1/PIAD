@@ -1,13 +1,15 @@
 ﻿  main.cpp
-main.cpp(11): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-c:\users\esteban.carranza\documents\github\piad\piad_cpp\piad_cpp\v_tbc_main.h(125): warning C4101: 'rc': variable local sin referencia
-main.cpp(54): warning C4302: 'conversión de tipo': truncamiento de 'LPWSTR' a 'WORD'
-main.cpp(59): warning C4302: 'conversión de tipo': truncamiento de 'LPWSTR' a 'WORD'
-main.cpp(171): warning C4267: 'argumento': conversión de 'size_t' a 'int'; posible pérdida de datos
+c:\github\piad\piad_cpp\piad_cpp\convert.h(15): warning C4244: '=': conversión de 'WCHAR' a 'char'; posible pérdida de datos
+main.cpp(12): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+c:\github\piad\piad_cpp\piad_cpp\v_tbc_main.h(125): warning C4101: 'rc': variable local sin referencia
+c:\github\piad\piad_cpp\piad_cpp\guardar_imagen.h(38): warning C4091: 'static ': se ha omitido a la izquierda de 'guardar' cuando no hay ninguna variable declarada
+c:\github\piad\piad_cpp\piad_cpp\e4.h(101): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_cpp\piad_cpp\e4.h(102): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_cpp\piad_cpp\e4.h(114): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
   Generando código
-  3 of 9 functions (33.3%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
+  268 of 268 functions (100.0%) were compiled, the rest were copied from previous compilation.
+    234 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada
-  PIAD_CPP.vcxproj -> C:\Users\esteban.carranza\Documents\GitHub\PIAD\PIAD_CPP\x64\Release\PIAD_CPP.exe
-  PIAD_CPP.vcxproj -> C:\Users\esteban.carranza\Documents\GitHub\PIAD\PIAD_CPP\x64\Release\PIAD_CPP.pdb (Full PDB)
+  PIAD_CPP.vcxproj -> C:\GitHub\PIAD\PIAD_CPP\x64\Release\PIAD_CPP.exe
+  PIAD_CPP.vcxproj -> C:\GitHub\PIAD\PIAD_CPP\x64\Release\PIAD_CPP.pdb (Full PDB)
