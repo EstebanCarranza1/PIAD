@@ -164,6 +164,7 @@
     <ClInclude Include="formatos.h" />
     <ClInclude Include="guardar_imagen.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="Mat2Bitmap.h" />
     <ClInclude Include="mod.picture.h" />
     <ClInclude Include="OpenFileDialog.h" />
     <ClInclude Include="resource.h" />

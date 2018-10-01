@@ -7,9 +7,7 @@ c:\github\piad\piad_cpp\piad_cpp\e4.h(101): warning C4244: 'argumento': conversi
 c:\github\piad\piad_cpp\piad_cpp\e4.h(102): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
 c:\github\piad\piad_cpp\piad_cpp\e4.h(114): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
   Generando código
-  268 of 268 functions (100.0%) were compiled, the rest were copied from previous compilation.
-    234 functions were new in current compilation
-    0 functions had inline decision re-evaluated but remain unchanged
+  All 268 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Generación de código finalizada
   PIAD_CPP.vcxproj -> C:\GitHub\PIAD\PIAD_CPP\x64\Release\PIAD_CPP.exe
   PIAD_CPP.vcxproj -> C:\GitHub\PIAD\PIAD_CPP\x64\Release\PIAD_CPP.pdb (Full PDB)

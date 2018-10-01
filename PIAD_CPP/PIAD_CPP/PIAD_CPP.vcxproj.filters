@@ -98,6 +98,9 @@
     <ClInclude Include="guardar_imagen.h">
       <Filter>Archivos de código fuente\control</Filter>
     </ClInclude>
+    <ClInclude Include="Mat2Bitmap.h">
+      <Filter>Archivos de código fuente\util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PIAD_CPP.rc">
