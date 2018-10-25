@@ -8,9 +8,10 @@
 #include "convert.h"
 #include "dbx_filtros.h"
 #include "mod.picture.h"
+#include "mod.filtro.h"
 #include "guardar_imagen.h"
 
-#pragma comment(lib,"opencv_world310d.lib")
+#pragma comment(lib,"opencv_world310.lib")
 
 
 
@@ -26,37 +27,79 @@ HBITMAP cambiarPic()
 	return hBitmapX;
 }
 string nombreFiltro = "Filtros";
-void promedio(uchar *p, uchar *q, int j)
+void copia(uchar *p, uchar *q, int j)
 {
-	nombreFiltro = "Promedio";
-	//b
-	q[j] = ((p[j] + p[j + 1] + p[j + 2]) / 3);
-	//g
-	q[j + 1] = ((p[j] + p[j + 1] + p[j + 2]) / 3);
-	//r		   
-	q[j + 2] = ((p[j] + p[j + 1] + p[j + 2]) / 3);
+	q[j] = p[j];
+	q[j + 1] = p[j + 1];
+	q[j + 2] = p[j + 2];
 }
-void luminancia(uchar *p, uchar *q, int j)
+void promedio(uchar *p, uchar *q, int j, bool activar)
 {
-	nombreFiltro = "Luminancia";
-	//b
-	q[j] = p[j] * 0.11;
-	//g
-	q[j + 1] = p[j + 1] * 0.59;
-	//r		   
-	q[j + 2] = p[j + 2] * 0.3;
-}
-void sepia(uchar *p, uchar *q, int j)
-{
-	nombreFiltro = "Sepia";
-	//b
-	q[j] = ((p[j + 2] * 0.272) + (p[j + 1] * 0.534) + (p[j] * 0.131));
-	//g
-	q[j + 1] = ((p[j + 2] * 0.349) + (p[j + 1] * 0.686) + (p[j] * 0.168));
-	//r		   
-	q[j + 2] = ((p[j + 2] * 0.393) + (p[j + 1] * 0.769) + (p[j] * 0.189));
+	if(activar)
+	{
+		nombreFiltro = "Promedio";
+		//b
+		q[j] = ((p[j] + p[j + 1] + p[j + 2]) / 3);
+		//g
+		q[j + 1] = ((p[j] + p[j + 1] + p[j + 2]) / 3);
+		//r		   
+		q[j + 2] = ((p[j] + p[j + 1] + p[j + 2]) / 3);
+	}
 }
 
+void luminosidad(uchar *p, uchar *q, int j, int nCols, bool activar)
+{
+	if (activar)
+	{
+		
+		//b
+		
+		//g
+		
+		//r
+		
+	}
+}
+void luminancia(uchar *p, uchar *q, int j, bool activar)
+{
+	if (activar)
+	{
+		nombreFiltro = "Luminancia";
+		
+	
+		//b
+		q[j] = (p[j] * 0.11) + (p[j + 1] * 0.59) + (p[j + 2] * 0.30);
+		//g
+		q[j + 1] = (p[j] * 0.11) + (p[j + 1] * 0.59) + (p[j + 2] * 0.30);
+			//r		   
+		q[j + 2] = (p[j] * 0.11) + (p[j + 1] * 0.59) + (p[j + 2] * 0.30);
+		
+	}
+}
+void sepia(uchar *p, uchar *q, int j, bool activar)
+{
+	if (activar)
+	{  
+		nombreFiltro = "Sepia";
+		uchar valBlue = ((p[j + 2] * 0.272) + (p[j + 1] * 0.534) + (p[j] * 0.131));
+		uchar valGreen = ((p[j + 2] * 0.349) + (p[j + 1] * 0.686) + (p[j] * 0.168));
+		uchar valRed = ((p[j + 2] * 0.393) + (p[j + 1] * 0.769) + (p[j] * 0.189));
+		(valBlue > 255) ?	valBlue = 255:valBlue = valBlue;
+		(valBlue < 0) ?		valBlue = 0 : valBlue = valBlue;
+		(valGreen > 255) ?	valGreen = 255 : valGreen = valGreen;
+		(valGreen < 0) ?	valGreen = 0 : valGreen = valGreen;
+		(valRed > 255) ?	valRed = 255 : valRed = valRed;
+		(valRed < 0) ?		valRed = 0 : valRed = valRed;
+
+		//b
+		q[j] = valBlue;
+		//g
+		q[j + 1] = valGreen;
+		//r		   
+		q[j + 2] = valRed;
+	}
+}
+bool ventana_abierta = false;
 void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada)
 {
 	//clase correspondiente a la camara
@@ -88,7 +131,7 @@ void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada)
 		//sus caracteristicas de ancho, alto, canales
 		frame2 = frame.clone();
 		//convertimos a gris para manejar un solo canal
-		cvtColor(frame2, gris, CV_BGR2GRAY);
+		//cvtColor(frame2, gris, CV_BGR2GRAY);
 		//obtenemos las filas de la imagen
 		int nRows = frame.rows;
 		//las columnas efectivas de la imagen
@@ -97,25 +140,32 @@ void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada)
 		int i, j, k = 0;
 		//punteros para manejar a la imagen
 		uchar *p, *q;
-		for (i = 0; i < nRows; ++i)
+		for (i = 0; i < nRows; i++)
 		{
 			p = frame.ptr<uchar>(i);
 			q = frame2.ptr<uchar>(i);
 
 			for (j = 0; j < nCols; j += 3)
 			{
+				copia(p, q, j);	
+				luminancia(p, q, j, objFiltro.propFiltro[1].activado);
+				luminosidad(p, q, j, nCols, objFiltro.propFiltro[2].activado);
+				promedio(p, q, j, objFiltro.propFiltro[3].activado);
+				sepia(p, q, j, objFiltro.propFiltro[4].activado);
+
 				
-				/*q[j] = p[j];
-				q[j + 1] = p[j + 1];
-				q[j + 2] = p[j + 2];*/
 			}
 		}
+		imshow("Imagen sin filtrar", frame);
+		imshow("Imagen filtrada", frame2);
+		
 
+		
 
 		//crea la ventana y muestralo al mundo!
 		//imshow("Mi primer Video", frame2);
-		Mat frameX(frame, Rect(0, 0, 640, 480));
-		imshow("Imagen sin filtrar", frameX);
+		//Mat frameX(frame, Rect(0, 0, 640, 480));
+		//imshow("Imagen sin filtrar", frameX);
 	
 		//hBitmap = CreateBitmap(frame2.cols, frame2.rows, 0, 0, &frame2.data);
 		//cvEncodeImage(".bmp", frame2, CV_8UC1, imwrite("foto", frame2, ))
@@ -125,8 +175,8 @@ void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada)
 		//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap);
 		
 		//Mat gris2(gris.clone(), Rect(0, 0, 640, 480));
-		equalizeHist(gris, gris);
-		imshow(nombreFiltro, gris);
+		///equalizeHist(gris, gris);
+		//imshow(nombreFiltro, gris);
 
 		//guardar::guardar_imagen(gris, hWnd, imageFiltrada);
 
