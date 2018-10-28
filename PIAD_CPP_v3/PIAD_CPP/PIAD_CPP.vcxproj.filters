@@ -35,9 +35,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tabName.h">
-      <Filter>Archivos de código fuente\model</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
@@ -70,21 +67,6 @@
     </ClInclude>
     <ClInclude Include="ventana.h">
       <Filter>Archivos de código fuente\control</Filter>
-    </ClInclude>
-    <ClInclude Include="e2.h">
-      <Filter>Archivos de código fuente\ejemplos</Filter>
-    </ClInclude>
-    <ClInclude Include="e3.h">
-      <Filter>Archivos de código fuente\ejemplos</Filter>
-    </ClInclude>
-    <ClInclude Include="e5.h">
-      <Filter>Archivos de código fuente\ejemplos</Filter>
-    </ClInclude>
-    <ClInclude Include="e4.h">
-      <Filter>Archivos de código fuente\ejemplos</Filter>
-    </ClInclude>
-    <ClInclude Include="ejemplos.h">
-      <Filter>Archivos de código fuente\ejemplos</Filter>
     </ClInclude>
     <ClInclude Include="mod.picture.h">
       <Filter>Archivos de código fuente\model</Filter>

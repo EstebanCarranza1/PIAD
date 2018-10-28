@@ -6,7 +6,6 @@ c:\github\piad\piad_cpp_v3\piad_cpp\guardar_imagen.h(38): warning C4091: 'static
 c:\github\piad\piad_cpp_v3\piad_cpp\e1.h(71): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_cpp_v3\piad_cpp\e1.h(73): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_cpp_v3\piad_cpp\e1.h(75): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\github\piad\piad_cpp_v3\piad_cpp\e1.h(84): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_cpp_v3\piad_cpp\e1.h(85): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_cpp_v3\piad_cpp\e1.h(86): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_cpp_v3\piad_cpp\ctrl_dbx_filtros.h(72): warning C4060: la instrucción switch no contiene etiquetas 'case' ni 'default'
@@ -14,7 +13,7 @@ c:\github\piad\piad_cpp_v3\piad_cpp\e4.h(101): warning C4244: 'argumento': conve
 c:\github\piad\piad_cpp_v3\piad_cpp\e4.h(102): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
 c:\github\piad\piad_cpp_v3\piad_cpp\e4.h(114): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
   Generando código
-  4 of 282 functions ( 1.4%) were compiled, the rest were copied from previous compilation.
+  5 of 282 functions ( 1.8%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     2 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada

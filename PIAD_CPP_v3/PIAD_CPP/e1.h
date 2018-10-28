@@ -11,7 +11,7 @@
 #include "mod.filtro.h"
 #include "guardar_imagen.h"
 
-#pragma comment(lib,"opencv_world310.lib")
+#pragma comment(lib,"opencv_world310d.lib")
 
 
 
@@ -19,13 +19,13 @@ using namespace cv;
 using namespace std;
 HBITMAP hBitmap;
 
-
+/*
 HBITMAP cambiarPic()
 {
 	HBITMAP hBitmapX;
 	hBitmapX = (HBITMAP)LoadImage(NULL, L"C:\\DATA\\02.bmp", IMAGE_BITMAP, 640, 480, LR_LOADFROMFILE);
 	return hBitmapX;
-}
+}*/
 string nombreFiltro = "Filtros";
 void copia(uchar *p, uchar *q, int j)
 {
@@ -79,17 +79,18 @@ void luminancia(uchar *p, uchar *q, int j, bool activar)
 void sepia(uchar *p, uchar *q, int j, bool activar)
 {
 	if (activar)
-	{  
+	{
 		nombreFiltro = "Sepia";
-		uchar valBlue = ((p[j + 2] * 0.272) + (p[j + 1] * 0.534) + (p[j] * 0.131));
+		uchar valBlue =  ((p[j + 2] * 0.272) + (p[j + 1] * 0.534) + (p[j] * 0.131));
 		uchar valGreen = ((p[j + 2] * 0.349) + (p[j + 1] * 0.686) + (p[j] * 0.168));
 		uchar valRed = ((p[j + 2] * 0.393) + (p[j + 1] * 0.769) + (p[j] * 0.189));
-		(valBlue > 255) ?	valBlue = 255:valBlue = valBlue;
-		(valBlue < 0) ?		valBlue = 0 : valBlue = valBlue;
-		(valGreen > 255) ?	valGreen = 255 : valGreen = valGreen;
-		(valGreen < 0) ?	valGreen = 0 : valGreen = valGreen;
-		(valRed > 255) ?	valRed = 255 : valRed = valRed;
-		(valRed < 0) ?		valRed = 0 : valRed = valRed;
+
+		if (valBlue > 255) { valBlue = 255; MessageBoxA(0, "Blue > 255", "", 0); }// valBlue = valBlue;
+		if(valBlue < 0) {	valBlue = 0; MessageBoxA(0, "Blue < 0", "", 0);}// valBlue = valBlue;
+		(valGreen > 255)	?	valGreen = 255	: valGreen	= valGreen;
+		(valGreen < 0)		?	valGreen = 0	: valGreen	= valGreen;
+		(valRed > 255)		?	valRed = 255	: valRed	= valRed;
+		(valRed < 0)		?	valRed = 0		: valRed	= valRed;
 
 		//b
 		q[j] = valBlue;

@@ -157,11 +157,6 @@
     <ClInclude Include="ctrl_dbx_menu.h" />
     <ClInclude Include="dbx_filtros.h" />
     <ClInclude Include="e1.h" />
-    <ClInclude Include="e2.h" />
-    <ClInclude Include="e3.h" />
-    <ClInclude Include="e4.h" />
-    <ClInclude Include="e5.h" />
-    <ClInclude Include="ejemplos.h" />
     <ClInclude Include="formatos.h" />
     <ClInclude Include="guardar_imagen.h" />
     <ClInclude Include="Image.h" />
@@ -170,7 +165,6 @@
     <ClInclude Include="mod.filtro.h" />
     <ClInclude Include="OpenFileDialog.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="tabName.h" />
     <ClInclude Include="ventana.h" />
   </ItemGroup>
   <ItemGroup>
