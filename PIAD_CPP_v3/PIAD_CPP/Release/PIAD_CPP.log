@@ -1,7 +1,0 @@
-﻿  main.cpp
-c:\users\esteban.carranza\documents\github\piad\piad_cpp\piad_cpp\controls.h(31): warning C4244: 'argumento': conversión de 'float' a 'int'; posible pérdida de datos
-main.cpp(11): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-c:\users\esteban.carranza\documents\github\piad\piad_cpp\piad_cpp\v_tbc_main.h(125): warning C4101: 'rc': variable local sin referencia
-main.cpp(54): warning C4302: 'conversión de tipo': truncamiento de 'LPWSTR' a 'WORD'
-main.cpp(59): warning C4302: 'conversión de tipo': truncamiento de 'LPWSTR' a 'WORD'
-LINK : fatal error LNK1104: no se puede abrir el archivo 'opencv_world310.lib'
