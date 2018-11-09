@@ -2,9 +2,10 @@
 #include <Windows.h>
 #include "resource.h"
 #include "OpenFileDialog.h"
-#include "e1.h"
+#include "filtros.h"
 #include "mod.picture.h"
 #include "mod.filtro.h"
+#include "ctrl_filtros.h"
 
 
 mod_picture picNormal, picFiltrada;
@@ -194,6 +195,7 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						
 						SetWindowTextA(txt_path, (LPCSTR)pathCHAR);
 						SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
+						ctrl_filtros::modes::imagen_desde_archivo(pathCHAR);
 						//picNormal.setImagen((HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 300, 300, LR_LOADFROMFILE));
 						//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)picNormal.getImagen());
 					}

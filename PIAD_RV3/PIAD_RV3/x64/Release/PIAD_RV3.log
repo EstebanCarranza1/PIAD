@@ -1,18 +1,27 @@
 ﻿  main.cpp
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\convert.h(15): warning C4244: '=': conversión de 'WCHAR' a 'char'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\convert.h(25): warning C4244: '=': conversión de 'const WCHAR' a 'char'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\guardar_imagen.h(38): warning C4091: 'static ': se ha omitido a la izquierda de 'guardar' cuando no hay ninguna variable declarada
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\mod.saveData.h(27): warning C4091: 'static ': se ha omitido a la izquierda de 'saveData' cuando no hay ninguna variable declarada
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(74): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(76): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(78): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(88): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(89): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(90): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(75): warning C4060: la instrucción switch no contiene etiquetas 'case' ni 'default'
+c:\github\piad\piad_rv3\piad_rv3\convert.h(15): warning C4244: '=': conversión de 'WCHAR' a 'char'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\convert.h(25): warning C4244: '=': conversión de 'const WCHAR' a 'char'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\mod.saveData.h(27): warning C4091: 'static ': se ha omitido a la izquierda de 'saveData' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(84): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(86): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(88): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(97): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(98): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(99): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_multimedia.h(72): warning C4091: 'static ': se ha omitido a la izquierda de 'mod_multimedia::imagen' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\ctrl_multimedia.h(92): warning C4091: 'static ': se ha omitido a la izquierda de 'mod_multimedia::video' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\ctrl_multimedia.h(95): warning C4091: 'static ': se ha omitido a la izquierda de 'mod_multimedia' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(55): warning C4091: 'static ': se ha omitido a la izquierda de 'ctrl_filtros::modes' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(57): warning C4091: 'static ': se ha omitido a la izquierda de 'ctrl_filtros' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(36): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(38): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(40): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(75): warning C4060: la instrucción switch no contiene etiquetas 'case' ni 'default'
   Generando código
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\convert.h(28): warning C4172: devolución de dirección de la variable local o temporal: charArray
-  All 133 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+c:\github\piad\piad_rv3\piad_rv3\convert.h(28): warning C4172: devolución de dirección de la variable local o temporal: charArray
+  136 of 137 functions (99.3%) were compiled, the rest were copied from previous compilation.
+    18 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   Generación de código finalizada
-  PIAD_RV3.vcxproj -> C:\Users\esteban.carranza\Documents\Visual Studio 2015\Projects\PIAD_RV3\x64\Release\PIAD_RV3.exe
-  PIAD_RV3.vcxproj -> C:\Users\esteban.carranza\Documents\Visual Studio 2015\Projects\PIAD_RV3\x64\Release\PIAD_RV3.pdb (Full PDB)
+  PIAD_RV3.vcxproj -> C:\GitHub\PIAD\PIAD_RV3\x64\Release\PIAD_RV3.exe
+  PIAD_RV3.vcxproj -> C:\GitHub\PIAD\PIAD_RV3\x64\Release\PIAD_RV3.pdb (Full PDB)

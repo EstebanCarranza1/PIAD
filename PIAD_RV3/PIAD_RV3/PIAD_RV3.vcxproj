@@ -28,10 +28,11 @@
     <ClInclude Include="ctrl_dbx_conteo.h" />
     <ClInclude Include="ctrl_dbx_filtros.h" />
     <ClInclude Include="ctrl_dbx_menu.h" />
+    <ClInclude Include="ctrl_filtros.h" />
     <ClInclude Include="dbx_filtros.h" />
-    <ClInclude Include="e1.h" />
+    <ClInclude Include="filtros.h" />
     <ClInclude Include="formatos.h" />
-    <ClInclude Include="guardar_imagen.h" />
+    <ClInclude Include="ctrl_multimedia.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Mat2Bitmap.h" />
     <ClInclude Include="mod.filtro.h" />

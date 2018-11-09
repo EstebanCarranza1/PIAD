@@ -45,14 +45,8 @@
     <ClInclude Include="ctrl_dbx_menu.h">
       <Filter>Archivos de código fuente\control</Filter>
     </ClInclude>
-    <ClInclude Include="guardar_imagen.h">
-      <Filter>Archivos de código fuente\control</Filter>
-    </ClInclude>
     <ClInclude Include="ventana.h">
       <Filter>Archivos de código fuente\control</Filter>
-    </ClInclude>
-    <ClInclude Include="e1.h">
-      <Filter>Archivos de código fuente\ejemplos</Filter>
     </ClInclude>
     <ClInclude Include="dbx_filtros.h">
       <Filter>Archivos de código fuente\model</Filter>
@@ -85,6 +79,15 @@
       <Filter>Archivos de código fuente\control</Filter>
     </ClInclude>
     <ClInclude Include="mod.resolucion.h">
+      <Filter>Archivos de código fuente\model</Filter>
+    </ClInclude>
+    <ClInclude Include="filtros.h">
+      <Filter>Archivos de código fuente\ejemplos</Filter>
+    </ClInclude>
+    <ClInclude Include="ctrl_filtros.h">
+      <Filter>Archivos de código fuente\control</Filter>
+    </ClInclude>
+    <ClInclude Include="ctrl_multimedia.h">
       <Filter>Archivos de código fuente\model</Filter>
     </ClInclude>
   </ItemGroup>
