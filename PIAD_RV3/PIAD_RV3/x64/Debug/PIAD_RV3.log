@@ -1,16 +1,16 @@
 ﻿  main.cpp
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\convert.h(15): warning C4244: '=': conversión de 'WCHAR' a 'char'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\convert.h(25): warning C4244: '=': conversión de 'const WCHAR' a 'char'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\guardar_imagen.h(38): warning C4091: 'static ': se ha omitido a la izquierda de 'guardar' cuando no hay ninguna variable declarada
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\mod.savedata.h(27): warning C4091: 'static ': se ha omitido a la izquierda de 'saveData' cuando no hay ninguna variable declarada
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(74): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(76): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(78): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(88): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(89): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\e1.h(90): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(75): warning C4060: la instrucción switch no contiene etiquetas 'case' ni 'default'
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\convert.h(16): warning C4172: devolución de dirección de la variable local o temporal: Char
-c:\users\esteban.carranza\documents\visual studio 2015\projects\piad_rv3\piad_rv3\convert.h(28): warning C4172: devolución de dirección de la variable local o temporal: charArray
-  PIAD_RV3.vcxproj -> C:\Users\esteban.carranza\Documents\Visual Studio 2015\Projects\PIAD_RV3\x64\Debug\PIAD_RV3.exe
-  PIAD_RV3.vcxproj -> C:\Users\esteban.carranza\Documents\Visual Studio 2015\Projects\PIAD_RV3\x64\Debug\PIAD_RV3.pdb (Full PDB)
+c:\github\piad\piad_rv3\piad_rv3\convert.h(15): warning C4244: '=': conversión de 'WCHAR' a 'char'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\convert.h(25): warning C4244: '=': conversión de 'const WCHAR' a 'char'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\guardar_imagen.h(38): warning C4091: 'static ': se ha omitido a la izquierda de 'guardar' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\mod.savedata.h(27): warning C4091: 'static ': se ha omitido a la izquierda de 'saveData' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\e1.h(74): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\e1.h(76): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\e1.h(78): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\e1.h(88): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\e1.h(89): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\e1.h(90): warning C4244: 'inicializando': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(74): warning C4060: la instrucción switch no contiene etiquetas 'case' ni 'default'
+c:\github\piad\piad_rv3\piad_rv3\convert.h(28): warning C4172: devolución de dirección de la variable local o temporal: charArray
+c:\github\piad\piad_rv3\piad_rv3\convert.h(16): warning C4172: devolución de dirección de la variable local o temporal: Char
+  PIAD_RV3.vcxproj -> C:\GitHub\PIAD\PIAD_RV3\x64\Debug\PIAD_RV3.exe
+  PIAD_RV3.vcxproj -> C:\GitHub\PIAD\PIAD_RV3\x64\Debug\PIAD_RV3.pdb (Full PDB)

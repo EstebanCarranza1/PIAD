@@ -2,10 +2,12 @@
 #include <Windows.h>
 #include "resource.h"
 #include "OpenFileDialog.h"
-#include "mod.picture.h"
+#include "mod.resolucion.h"
+
 //#include "e4.h"
 
-mod_picture picConteo;
+//mod_picture picConteo;
+HWND cbx_resolucion;
 
 LRESULT CALLBACK call_conteo(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -13,16 +15,18 @@ LRESULT CALLBACK call_conteo(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_INITDIALOG:
 	{
-
-		HWND hPicConteo = GetDlgItem(hWnd, PIC_VIDEOCAMERA);
-		
-		picConteo.setSize(640, 480);
-		picConteo.setPathDefault("config\\gamma.bmp");
-		picConteo.id = PIC_VIDEOCAMERA;
-		
-
-		picConteo.setImagen((HBITMAP)LoadImage(NULL, convertCharArrayToLPCWSTR(picConteo.getPath()), IMAGE_BITMAP, picConteo.getSizeWidth(), picConteo.getSizeHeight(), LR_LOADFROMFILE));
-		SendDlgItemMessage(hWnd, picConteo.id, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)picConteo.getImagen());
+		cbx_resolucion = GetDlgItem(hWnd, CBX_RESOLUCION);
+		//HWND hPicConteo = GetDlgItem(hWnd, PIC_VIDEOCAMERA);
+		for (int i = 0; i < objResolucion.total; i++)
+		{
+			SendMessageA(cbx_resolucion, CB_ADDSTRING, 0, (LPARAM)objResolucion.values[i].nombre);
+		}
+		/*SendMessageA(cbx_resolucion, CB_ADDSTRING, 0, (LPARAM)"144p (256x144)");
+		SendMessageA(cbx_resolucion, CB_ADDSTRING, 0, (LPARAM)"240p (426x240)");
+		SendMessageA(cbx_resolucion, CB_ADDSTRING, 0, (LPARAM)"360p (640x360)");
+		SendMessageA(cbx_resolucion, CB_ADDSTRING, 0, (LPARAM)"480p (854x480)");
+		SendMessageA(cbx_resolucion, CB_ADDSTRING, 0, (LPARAM)"720p (1280x720)");*/
+		SendMessageA(cbx_resolucion, CB_SETCURSEL, 3, 0);
 
 	}
 	break;

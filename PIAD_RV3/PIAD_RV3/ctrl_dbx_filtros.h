@@ -3,7 +3,6 @@
 #include "resource.h"
 #include "OpenFileDialog.h"
 #include "e1.h"
-#include "ctrl_dbx_console.h"
 #include "mod.picture.h"
 #include "mod.filtro.h"
 

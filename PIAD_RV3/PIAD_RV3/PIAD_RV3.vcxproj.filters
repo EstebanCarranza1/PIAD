@@ -36,9 +36,6 @@
     <ClInclude Include="controls.h">
       <Filter>Archivos de código fuente\control</Filter>
     </ClInclude>
-    <ClInclude Include="ctrl_dbx_console.h">
-      <Filter>Archivos de código fuente\control</Filter>
-    </ClInclude>
     <ClInclude Include="ctrl_dbx_conteo.h">
       <Filter>Archivos de código fuente\control</Filter>
     </ClInclude>
@@ -83,6 +80,12 @@
     </ClInclude>
     <ClInclude Include="OpenFileDialog.h">
       <Filter>Archivos de código fuente\view</Filter>
+    </ClInclude>
+    <ClInclude Include="ctrl_dbx_acercade.h">
+      <Filter>Archivos de código fuente\control</Filter>
+    </ClInclude>
+    <ClInclude Include="mod.resolucion.h">
+      <Filter>Archivos de código fuente\model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

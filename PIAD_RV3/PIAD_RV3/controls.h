@@ -2,7 +2,7 @@
 #include "dbx_filtros.h"
 #ifndef objects
 #define objects
-mod_dialogBox dbx_menu, dbx_filtrado, dbx_conteo;
+mod_dialogBox dbx_menu, dbx_filtrado, dbx_conteo, dbx_acercade;
 
 /*
 class _objects
