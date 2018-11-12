@@ -110,6 +110,27 @@ void sepia(uchar *p, uchar *q, int j, bool activar)
 		q[j + 2] = valRed;
 	}
 }
+void gausiano(uchar *p, uchar *q, int j, bool activar)
+{
+	if (activar)
+	{
+		nombreFiltro = "Sepia";
+		int valBlue =	((p[j + 2] + 1) +		(p[j + 1] + 2) + (p[j] + 1));
+		int valGreen =	((p[j + 2] + 2) +	(p[j + 1] + 7) + (p[j] + 2));
+		int valRed =	((p[j + 2] + 1) +		(p[j + 1] + 2) + (p[j] + 1));
+
+		corte_saturacion(&valBlue);
+		corte_saturacion(&valGreen);
+		corte_saturacion(&valRed);
+
+		//b
+		q[j] = valBlue;
+		//g
+		q[j + 1] = valGreen;
+		//r		   
+		q[j + 2] = valRed;
+	}
+}
 bool ventana_abierta = false;
 void cargar_imagen(cv::String path)
 {
@@ -178,6 +199,7 @@ void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada)
 				luminosidad(p, q, j, nCols, objFiltro.propFiltro[2].activado);
 				promedio(p, q, j, objFiltro.propFiltro[3].activado);
 				sepia(p, q, j, objFiltro.propFiltro[4].activado);
+				gausiano(p, q, j, objFiltro.propFiltro[8].activado);
 
 				
 			}
