@@ -192,7 +192,17 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				{
 					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
 					SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
-					obtener_imagen_desde_camara();
+					if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
+					{
+						obtener_imagen_desde_camara();
+					}
+					else if (opcion_elegida == objFiltro.reconocimiento_de_personas)
+					{
+						reconocimiento_personas(objFiltro.reconocimiento_de_personas);
+					}
+					
+
+					
 					/*
 					if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
 					{
@@ -229,9 +239,15 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 				case BTN_EXAMINAR:
 				{
-					
-					LPCWSTR path = getPathToImage(hWnd);
-					
+					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+					LPCWSTR path = NULL;
+					if (opcion_elegida == objFiltro.cargar_imagen_desde_camara)
+					{
+						 path = getPathToImage(hWnd);
+					}else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
+					{
+						path = getPathToVideo(hWnd);
+					}
 					
 					if (path != NULL)
 					{
@@ -241,7 +257,16 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
 						EnableWindow(btn_guardar_normal, true);
 						EnableWindow(btn_guardar_filtrada, true);
-						obtener_imagen_archivo(pathCHAR, objFiltro.cargar_imagen_desde_archivo);
+						
+						if (opcion_elegida == objFiltro.cargar_imagen_desde_camara)
+						{
+							obtener_imagen_archivo(pathCHAR, objFiltro.cargar_imagen_desde_archivo);
+						}
+						else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
+						{
+							obtener_video_archivo(pathCHAR, objFiltro.cargar_video_desde_archivo);
+						}
+						
 						//start_record(hWnd, picNormal, picFiltrada, objFiltro.cargar_imagen_desde_archivo, pathCHAR);
 						//ctrl_filtros::modes::imagen_desde_archivo(pathCHAR);
 						//picNormal.setImagen((HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 300, 300, LR_LOADFROMFILE));

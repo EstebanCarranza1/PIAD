@@ -39,6 +39,34 @@ LPCWSTR getPathToImage(HWND hWnd)
 	}
 	return NULL;
 }
+LPCWSTR getPathToVideo(HWND hWnd)
+{
+
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	//ofn.lpstrFilter = _T("Imagenes BMP\0*.bmp\0 Todos los archivos \0*.*\0");
+	ofn.lpstrFilter = _T("Todo \0*.*\0");
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+	if (GetOpenFileName(&ofn) == TRUE)
+	{
+		return ofn.lpstrFile;
+	}
+	else
+	{
+		MessageBox(0, L"No se eligió archivo", L"Abrir imagen", NULL);
+		dbx_filtrado.imagen_obtenida = false;
+		return NULL;
+	}
+	return NULL;
+}
 LPCWSTR getPathToSave(HWND hWnd)
 {
 
