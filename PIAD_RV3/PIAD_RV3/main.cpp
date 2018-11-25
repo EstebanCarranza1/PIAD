@@ -25,6 +25,7 @@ int CALLBACK WinMain(
 	_In_ int       nCmdShow)
 {
 
-	DialogBox(dbx_menu.hInst, MAKEINTRESOURCE(DBX_MENU), NULL, reinterpret_cast<DLGPROC>(call_menu));
+	//DialogBox(dbx_menu.hInst, MAKEINTRESOURCE(DBX_MENU), NULL, reinterpret_cast<DLGPROC>(call_menu));
+	DialogBox(dbx_filtrado.hInst, MAKEINTRESOURCE(DBX_FILTROS), 0, reinterpret_cast<DLGPROC>(call_filtrado));
 	return 0;
 }

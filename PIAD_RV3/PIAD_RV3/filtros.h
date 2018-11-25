@@ -64,13 +64,30 @@ void luminosidad(uchar *p, uchar *q, int j, int nCols, bool activar)
 {
 	if (activar)
 	{
-		
+		int maxRGB = 0;
+		int minRGB = 0;
+
+		if (p[j] > p[j + 1] && p[j] > p[j + 2])
+			maxRGB = p[j];
+		else if (p[j + 1] > p[j] && p[j + 1] > p[j + 2])
+			maxRGB = p[j + 1];
+		else if (p[j + 2] > p[j] && p[j + 2] > p[j + 1])
+			maxRGB = p[j + 2];
+
+		if (p[j] < p[j + 1] && p[j] < p[j + 2])
+			minRGB = p[j];
+		else if (p[j + 1] < p[j] && p[j + 1] < p[j + 2])
+			minRGB = p[j + 1];
+		else if (p[j + 2] < p[j] && p[j + 2] < p[j + 1])
+			minRGB = p[j + 2];
+
+
 		//b
-		
+		q[j] = (maxRGB + minRGB) / 2;
 		//g
-		
+		q[j+1] = (maxRGB + minRGB) / 2;
 		//r
-		
+		q[j+2] = (maxRGB + minRGB) / 2;
 	}
 }
 void luminancia(uchar *p, uchar *q, int j, bool activar)
@@ -147,7 +164,7 @@ void cargar_imagen(cv::String path)
 	else
 		MessageBoxA(0, "No se pudo cargar la imagen :c", "", 0);
 }
-void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada)
+void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada, int formaFiltrado)
 {
 	//clase correspondiente a la camara
 	//el paraemtro dice que camara de las conectadas
@@ -195,17 +212,18 @@ void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada)
 			for (j = 0; j < nCols; j += 3)
 			{
 				copia(p, q, j);	
-				luminancia(p, q, j, objFiltro.propFiltro[1].activado);
-				luminosidad(p, q, j, nCols, objFiltro.propFiltro[2].activado);
-				promedio(p, q, j, objFiltro.propFiltro[3].activado);
-				sepia(p, q, j, objFiltro.propFiltro[4].activado);
-				gausiano(p, q, j, objFiltro.propFiltro[8].activado);
+				luminancia(p, q, j, objFiltro.propFiltro[objFiltro.flt_luminancia].activado);
+				luminosidad(p, q, j, nCols, objFiltro.propFiltro[objFiltro.flt_luminosidad].activado);
+				promedio(p, q, j, objFiltro.propFiltro[objFiltro.flt_promedio].activado);
+				sepia(p, q, j, objFiltro.propFiltro[objFiltro.flt_sepia].activado);
+				gausiano(p, q, j, objFiltro.propFiltro[objFiltro.flt_gaussiano].activado);
 
 				
 			}
 		}
 		imshow("Imagen sin filtrar", frame);
-		imshow("Imagen filtrada", frame2);
+		if (formaFiltrado != objFiltro.reconocimiento_de_personas)
+			imshow("Imagen filtrada", frame2);
 		
 
 		
