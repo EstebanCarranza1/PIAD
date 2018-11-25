@@ -9,5 +9,9 @@ class mod_dialogBox
 	HWND hWnd;
 	HINSTANCE hInst;
 	bool cerrar_dialogo = false;
+	bool capturar = false;
+	bool imagen_obtenida = false;
+	bool guardar_img_filtrada = false;
+	bool guardar_img_original = false;
 	//virtual LRESULT CALLBACK callback(HWND, UINT, WPARAM, LPARAM);
 };

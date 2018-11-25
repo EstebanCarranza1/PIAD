@@ -9,7 +9,7 @@
 #include "dbx_filtros.h"
 #include "mod.picture.h"
 #include "mod.filtro.h"
-//#include "ctrl_multimedia.h"
+#include "ctrl_multimedia.h"
 #include "mod.saveData.h"
 
 //#pragma comment(lib,"opencv_world310d.lib")
@@ -64,8 +64,8 @@ void luminosidad(uchar *p, uchar *q, int j, int nCols, bool activar)
 {
 	if (activar)
 	{
-		int maxRGB = 0;
-		int minRGB = 0;
+		uchar maxRGB = 0;
+		uchar minRGB = 0;
 
 		if (p[j] > p[j + 1] && p[j] > p[j + 2])
 			maxRGB = p[j];
@@ -148,6 +148,7 @@ void gausiano(uchar *p, uchar *q, int j, bool activar)
 		q[j + 2] = valRed;
 	}
 }
+
 bool ventana_abierta = false;
 void cargar_imagen(cv::String path)
 {
@@ -164,30 +165,10 @@ void cargar_imagen(cv::String path)
 	else
 		MessageBoxA(0, "No se pudo cargar la imagen :c", "", 0);
 }
-void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada, int formaFiltrado)
+bool cameraOpen = false;
+void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 {
-	//clase correspondiente a la camara
-	//el paraemtro dice que camara de las conectadas
-	//es la que se va a leer
-	VideoCapture camara(0);
-
-	if (!camara.isOpened())  // si no se pudo ahi muere, lastima!
-	{
-		cout << "No se pudo abrir la camara" << endl;
-		return;
-	}
 	
-	//ciclo infinito para la lectura de la camara
-	while (1)
-	{
-		Mat frame, frame2, gris; //aqui guardaremos el frame
-		
-		bool exito = camara.read(frame); // lee un frame
-		if (!exito) //si no se pudo lastima de nuevo
-		{
-			cout << "no pude leer!" << endl;
-			break;
-		}
 		//de lo leido por la camara obtenemos la cantidad de
 		//canales, 3 por ser rgb
 		int channels = frame.channels();
@@ -202,6 +183,7 @@ void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada, int f
 		int nCols = frame.cols * channels;
 
 		int i, j, k = 0;
+
 		//punteros para manejar a la imagen
 		uchar *p, *q;
 		for (i = 0; i < nRows; i++)
@@ -211,50 +193,174 @@ void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada, int f
 
 			for (j = 0; j < nCols; j += 3)
 			{
-				copia(p, q, j);	
+				copia(p, q, j);
 				luminancia(p, q, j, objFiltro.propFiltro[objFiltro.flt_luminancia].activado);
 				luminosidad(p, q, j, nCols, objFiltro.propFiltro[objFiltro.flt_luminosidad].activado);
 				promedio(p, q, j, objFiltro.propFiltro[objFiltro.flt_promedio].activado);
 				sepia(p, q, j, objFiltro.propFiltro[objFiltro.flt_sepia].activado);
 				gausiano(p, q, j, objFiltro.propFiltro[objFiltro.flt_gaussiano].activado);
 
-				
+
 			}
 		}
+		
+		imshow("Imagen sin filtrar", frame);
+		if (formaFiltrado != objFiltro.reconocimiento_de_personas)
+			imshow("Imagen filtrada", frame2);
+		
+		if (objFiltro.cargar_imagen_desde_archivo || objFiltro.cargar_imagen_desde_camara)
+		{
+			if (dbx_filtrado.guardar_img_original)
+			{
+				dbx_filtrado.guardar_img_original = false;
+				LPCWSTR path = getPathToSave(0);
+				if (path != NULL)
+				{
+					char pathCHAR[255];
+					strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
+					mod_multimedia::imagen::SaveOfPC(frame, pathCHAR);
+					
+					MessageBoxA(0, "La imagen original fue guardada con exito", "Guardar imagen", 0);
+				}
+				else
+					MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
+				
+				
+			}
+			else if (dbx_filtrado.guardar_img_filtrada)
+			{
+				dbx_filtrado.guardar_img_filtrada = false;
+				LPCWSTR path = getPathToSave(0);
+				if (path != NULL)
+				{
+					char pathCHAR[255];
+					strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
+					mod_multimedia::imagen::SaveOfPC(frame2, pathCHAR);
+					MessageBoxA(0, "La imagen original fue guardada con exito", "Guardar imagen", 0);
+				}
+				else
+					MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
+
+			}
+		}
+		
+	
+	
+
+}
+void obtener_imagen_archivo(char path[255], int formaFiltrado)
+{
+	dbx_filtrado.cerrar_dialogo = false;
+	bool iniciar_filtrado = false;
+	Mat frame, frame2;
+	Mat resize;
+	frame = NULL; frame2 = NULL;
+	frame = mod_multimedia::imagen::LoadOfPC(path);
+	if (frame.dims > 0)
+	{
+		cv::resize(frame, resize, Size(640, 480), 0, 0, INTER_CUBIC);
+		frame = NULL;
+		frame = resize.clone();
+		iniciar_filtrado = true;
+	}
+	else
+	{
+		dbx_filtrado.cerrar_dialogo = true;
+		MessageBoxA(0, "Esta imagen no se puede cargar correctamente, verifique que la dirección o el nombre de la imagen no sean muy largos y/o que estén guardadas con el formato apropiado", "Carga de imagen", 0);
+	}
+	dbx_filtrado.cerrar_dialogo = false;
+
+	while (iniciar_filtrado)
+	{
+		
+			filtrar(frame, frame2, formaFiltrado);
+		
+		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
+		{
+			cvDestroyWindow("Imagen sin filtrar");
+			cvDestroyWindow("Imagen filtrada");
+			break;
+		}
+	}
+}
+void obtener_imagen_desde_camara()
+{
+	dbx_filtrado.cerrar_dialogo = false;
+	Mat frame, frame2;
+	VideoCapture camara(0);
+	if (!camara.isOpened())  // si no se pudo ahi muere, lastima!
+	{
+		cout << "No se pudo abrir la camara" << endl;
+		return;
+	}
+	while (1)
+	{
+		if (!dbx_filtrado.capturar)
+		{
+			bool exito = camara.read(frame); // lee un frame
+			if (!exito) //si no se pudo lastima de nuevo
+			{
+				cout << "no pude leer!" << endl;
+				break;
+			}
+		}
+		filtrar(frame, frame2, objFiltro.cargar_imagen_desde_camara);
+		
+		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
+		{
+			cvDestroyWindow("Imagen sin filtrar");
+			cvDestroyWindow("Imagen filtrada");
+			camara.release();
+			break;
+		}
+	}
+}
+void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada, int formaFiltrado,char path[255])
+{
+	
+	/*
+	//ciclo infinito para la lectura de la camara
+	while (1)
+	{
+		Mat frame, frame2; //aqui guardaremos el frame
+		if(
+			(formaFiltrado == objFiltro.cargar_imagen_desde_camara) ||
+			(formaFiltrado == objFiltro.cargar_video_desde_camara)
+			)
+		{
+		
+				VideoCapture camara(0);
+				if (!camara.isOpened())  // si no se pudo ahi muere, lastima!
+				{
+					cout << "No se pudo abrir la camara" << endl;
+					return;
+				}
+			
+			bool exito = camara.read(frame); // lee un frame
+			if (!exito) //si no se pudo lastima de nuevo
+			{
+				cout << "no pude leer!" << endl;
+				break;
+			}
+		}else if (formaFiltrado == objFiltro.cargar_imagen_desde_archivo)
+		{
+			
+			frame = mod_multimedia::imagen::LoadOfPC(path);
+		}
+		
 		imshow("Imagen sin filtrar", frame);
 		if (formaFiltrado != objFiltro.reconocimiento_de_personas)
 			imshow("Imagen filtrada", frame2);
 		
 
-		
-
-		//crea la ventana y muestralo al mundo!
-		//imshow("Mi primer Video", frame2);
-		//Mat frameX(frame, Rect(0, 0, 640, 480));
-		//imshow("Imagen sin filtrar", frameX);
 	
-		//hBitmap = CreateBitmap(frame2.cols, frame2.rows, 0, 0, &frame2.data);
-		//cvEncodeImage(".bmp", frame2, CV_8UC1, imwrite("foto", frame2, ))
-		
-		//guardar::guardar_imagen(frame2, hWnd, image);
-
-		//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, BM_SETIMAGE, IMAGE_BITMAP, (LPARAM)hBitmap);
-		
-		//Mat gris2(gris.clone(), Rect(0, 0, 640, 480));
-		///equalizeHist(gris, gris);
-		//imshow(nombreFiltro, gris);
-
-		//guardar::guardar_imagen(gris, hWnd, imageFiltrada);
-
-		//imshow("Escala de gris", gris2);
-		//detecta una tecla, si es el esc entonces fuera
 		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
 		{
 			cout << "juimonos!!" << endl;
 			break;
 		}
 
-	}
+	}*/
 }
 
 

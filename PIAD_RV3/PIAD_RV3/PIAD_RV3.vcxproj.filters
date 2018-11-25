@@ -90,6 +90,9 @@
     <ClInclude Include="ctrl_multimedia.h">
       <Filter>Archivos de código fuente\model</Filter>
     </ClInclude>
+    <ClInclude Include="OpenBrowserDialog.h">
+      <Filter>Archivos de código fuente\view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PIAD_RV3.rc">

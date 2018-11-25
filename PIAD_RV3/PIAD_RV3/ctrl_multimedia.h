@@ -48,12 +48,14 @@ public:
 		}
 		static int SaveOfPC(Mat mat, char path[255])
 		{
+			/*
 			vector<int> compression_params;
 			compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
-			compression_params.push_back(9);
+			compression_params.push_back(9);*/
 			try 
 			{
-				imwrite(path, mat, compression_params);	
+				//imwrite(path, mat, compression_params);	
+				imwrite(path, mat);
 				return 0;
 			}
 			catch (runtime_error& ex) {
@@ -69,7 +71,7 @@ public:
 		{
 
 		}
-	};
+	}imagen;
 	
 	static class video
 	{
@@ -89,7 +91,7 @@ public:
 		{
 
 		}
-	};
+	}video;
 
 
-};
+}obj_multimedia;

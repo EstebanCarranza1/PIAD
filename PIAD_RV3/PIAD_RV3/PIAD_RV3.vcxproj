@@ -39,6 +39,7 @@
     <ClInclude Include="mod.picture.h" />
     <ClInclude Include="mod.resolucion.h" />
     <ClInclude Include="mod.saveData.h" />
+    <ClInclude Include="OpenBrowserDialog.h" />
     <ClInclude Include="OpenFileDialog.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ventana.h" />
