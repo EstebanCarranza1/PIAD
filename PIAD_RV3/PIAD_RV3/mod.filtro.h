@@ -1,6 +1,7 @@
 #pragma once
 
-
+#define E 2.71828182845904523536;
+#define M_PI 3.14159265358979323846;  /* pi */
 
 static class clsFiltro
 {
@@ -32,7 +33,10 @@ public:
 		flt_sustraccionMedia,
 		flt_laplaciano,
 		flt_sobelC,
-		flt_sobelF
+		flt_sobelF,
+		flt_menosLaplaciano,
+		flt_direccionNorteSur,
+		flt_direccionEsteOeste
 	};
 	static enum formaFiltrado
 	{
@@ -50,9 +54,9 @@ public:
 		pathFiltro,
 		noDisponible
 	};
-	static const int max_nomFiltro = 13;
+	static const int max_nomFiltro = 16;
 	static const int max_formaFiltrado = 6;
-	static const int max_mensajes = 10;
+	static const int max_mensajes = 8;
 	static const int max_recMSG = 4;
 	struct propiedades
 	{
@@ -88,6 +92,10 @@ public:
 		strcpy_s(propFiltro[10].titulo, "Filtro laplaciano");
 		strcpy_s(propFiltro[11].titulo, "Filtro sobel C");
 		strcpy_s(propFiltro[12].titulo, "Filtro sobel F");
+		strcpy_s(propFiltro[13].titulo, "Menos laplaciano");
+		strcpy_s(propFiltro[14].titulo, "Direccion Norte Sur");
+		strcpy_s(propFiltro[15].titulo, "Direccion Este Oeste");
+
 		
 
 		strcpy_s(formaFiltrado[0].nombre, "<< NO SELECCIONAR NINGUNO >>");
@@ -104,6 +112,8 @@ public:
 		strcpy_s(filterMSG[4].nombre, "");// "HAS SELECCIONADO: ");
 		strcpy_s(filterMSG[5].nombre, "CAMARA INICIADA - ELIGE UNA FORMA DE FILTRADO");
 		strcpy_s(filterMSG[6].nombre, "IMAGEN CARGADA CON EXITO");
+		strcpy_s(filterMSG[7].nombre, "CARGADANDO IMAGEN");
+
 
 		strcpy_s(recMSG[0].nombre, "Direccion de la imagen: ");
 		strcpy_s(recMSG[1].nombre, "Personas reconocidas: ");
@@ -113,6 +123,104 @@ public:
 
 
 	}
+	class matrices
+	{
+		public:
+		int gaussiano[9];
+		int media[9] =
+		{
+			1, 1, 1,
+			1, 1, 1,
+			1, 1, 1
+		};
+		int mediaPonderada[9] =
+		{
+			1, 1, 1,
+			1, 2, 1,
+			1, 1, 1
+		};
+		int sustraccionMedia[9] =
+		{
+			-1, -1, -1,
+			-1, 8, -1,
+			-1, -1, -1
+		};
+		int laplaciano[9] =
+		{
+			0, 1, 0,
+			1, -4, 1,
+			0, 1, 0
+		};
+		int menosLaplaciano[9] = 
+		{
+			0, -1, 0, 
+			-1, 5, -1,
+			0, -1, 0
+		};
+		int direccionNorteSur[9] =
+		{
+			1, 1, 1,
+			1, -2, 1,
+			-1, -1, -1
+		};
+		int direccionEsteOeste[9] =
+		{
+			-1, 1, 1,
+			-1, 2, 1,
+			-1, 1, 1
+		};
+		int sobelC[9] =
+		{
+			-1, 0, 1,
+			-2, 0, 2,
+			-1, 0, 1
+		};
+		int sobelF[9] =
+		{
+			-1, -2, 1,
+			0, 0, 0,
+			1, 2, 1
+		};
+
+
+		void elevarPonderacionMedia(int ponderacion)
+		{
+			mediaPonderada[4] = ponderacion;
+		}
+		void calculate_sigma(float sigma, int filter[])
+		{
+			//float sigma = 0.75;
+			float operation1 = -1 * ((pow(-1, 2) + pow(-1, 2)) / pow(sigma, 2));
+			float operation2 = -1 * ((pow(-1, 2) + pow(0, 2)) / pow(sigma, 2));
+			float operation3 = -1 * ((pow(0, 2) + pow(0, 2)) / pow(sigma, 2));
+			float e = E;
+			float pi = M_PI;
+			float operation1_1 = ((2 * pi)*(pow(sigma, 2)));
+			float result1 = ((pow(e, operation1) != 0) ? (pow(e, operation1)) : 1) / operation1_1;
+			float result2 = ((pow(e, operation2) != 0) ? (pow(e, operation2)) : 1) / operation1_1;
+			float result3 = ((pow(e, operation3) != 0) ? (pow(e, operation3)) : 1) / operation1_1;
+			float min = 0;
+
+			(result1 > 255) ? result1 = 255.0 : result1 = result1;
+			(result1 < 0) ? result1 = 0.0 : result1 = result1;
+			(result2 > 255) ? result2 = 255.0 : result1 = result2;
+			(result2 < 0) ? result2 = 0.0 : result2 = result2;
+			(result3> 255) ? result3 = 255.0 : result1 = result3;
+			(result3 < 0) ? result3 = 0.0 : result3 = result3;
+
+			if (result1 < result2 && result1 < result3)			min = result1;
+			else if (result2 < result1 && result2 < result3)	min = result2;
+			else if (result3 < result1 && result3 < result2)	min = result3;
+			result1 = result1 / min;
+			result2 = result2 / min;
+			result3 = result3 / min;
+
+			filter[0] = result1; filter[1] = result2; filter[2] = result1;
+			filter[3] = result2; filter[4] = result3; filter[5] = result2;
+			filter[6] = result1; filter[7] = result2; filter[8] = result1;
+		}
+		
+	}matrices;
 }objFiltro;
 
 

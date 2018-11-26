@@ -1,25 +1,46 @@
 ﻿  main.cpp
 c:\github\piad\piad_rv3\piad_rv3\convert.h(15): warning C4244: '=': conversión de 'WCHAR' a 'char'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\convert.h(25): warning C4244: '=': conversión de 'const WCHAR' a 'char'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(36): warning C4091: 'static ': se ha omitido a la izquierda de 'clsFiltro::filtro' cuando no hay ninguna variable declarada
-c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(45): warning C4091: 'static ': se ha omitido a la izquierda de 'clsFiltro::formaFiltrado' cuando no hay ninguna variable declarada
-c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(52): warning C4091: 'static ': se ha omitido a la izquierda de 'clsFiltro::recMSG' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(40): warning C4091: 'static ': se ha omitido a la izquierda de 'clsFiltro::filtro' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(49): warning C4091: 'static ': se ha omitido a la izquierda de 'clsFiltro::formaFiltrado' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(56): warning C4091: 'static ': se ha omitido a la izquierda de 'clsFiltro::recMSG' cuando no hay ninguna variable declarada
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(193): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(194): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(195): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(196): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(197): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(218): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(219): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\mod.filtro.h(220): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\mod.savedata.h(27): warning C4091: 'static ': se ha omitido a la izquierda de 'saveData' cuando no hay ninguna variable declarada
-c:\github\piad\piad_rv3\piad_rv3\filtros.h(103): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\filtros.h(105): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\filtros.h(107): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\filtros.h(116): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\filtros.h(117): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\filtros.h(118): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(106): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(108): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(110): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(119): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(120): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(121): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(140): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(141): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(142): warning C4244: 'inicializando': conversión de 'double' a 'float'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(143): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(144): warning C4305: 'inicializando': truncamiento de 'double' a 'float'
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(165): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(166): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(167): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(190): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(289): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(466): warning C4305: 'argumento': truncamiento de 'double' a 'float'
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(55): warning C4091: 'static ': se ha omitido a la izquierda de 'ctrl_filtros::modes' cuando no hay ninguna variable declarada
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(57): warning C4091: 'static ': se ha omitido a la izquierda de 'ctrl_filtros' cuando no hay ninguna variable declarada
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(36): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(38): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(40): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(193): warning C4244: 'inicializando': conversión de 'LRESULT' a 'int'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(242): warning C4244: 'inicializando': conversión de 'LRESULT' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(243): warning C4244: 'inicializando': conversión de 'LRESULT' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(297): warning C4244: 'inicializando': conversión de 'LRESULT' a 'int'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(84): warning C4060: la instrucción switch no contiene etiquetas 'case' ni 'default'
-c:\github\piad\piad_rv3\piad_rv3\convert.h(16): warning C4172: devolución de dirección de la variable local o temporal: Char
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(245): warning C4101: 'str': variable local sin referencia
 c:\github\piad\piad_rv3\piad_rv3\convert.h(28): warning C4172: devolución de dirección de la variable local o temporal: charArray
+c:\github\piad\piad_rv3\piad_rv3\convert.h(16): warning C4172: devolución de dirección de la variable local o temporal: Char
   PIAD_RV3.vcxproj -> C:\GitHub\PIAD\PIAD_RV3\x64\Debug\PIAD_RV3.exe
   PIAD_RV3.vcxproj -> C:\GitHub\PIAD\PIAD_RV3\x64\Debug\PIAD_RV3.pdb (Full PDB)

@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <tchar.h>  
 #include "convert.h"
-
+#include <string>
 
 OPENFILENAME ofn;       // common dialog box structure
 TCHAR szFile[260] = { 0 };       // if using TCHAR macros
@@ -30,6 +30,9 @@ LPCWSTR getPathToImage(HWND hWnd)
 	if (GetOpenFileName(&ofn) == TRUE)
 	{
 		return ofn.lpstrFile;
+		/*wstring ws(ofn.lpstrFile);
+		string myVarS = string(ws.begin(), ws.end());
+		return myVarS;*/
 	}
 	else
 	{
@@ -41,11 +44,12 @@ LPCWSTR getPathToImage(HWND hWnd)
 }
 LPCWSTR getPathToVideo(HWND hWnd)
 {
-
+	//CHAR szFile[MAX_PATH];
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = hWnd;
 	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = '\0';
 	ofn.nMaxFile = sizeof(szFile);
 	//ofn.lpstrFilter = _T("Imagenes BMP\0*.bmp\0 Todos los archivos \0*.*\0");
 	ofn.lpstrFilter = _T("Todo \0*.*\0");
@@ -58,6 +62,9 @@ LPCWSTR getPathToVideo(HWND hWnd)
 	if (GetOpenFileName(&ofn) == TRUE)
 	{
 		return ofn.lpstrFile;
+		/*wstring ws(ofn.lpstrFile);
+		string myVarS = string(ws.begin(), ws.end());
+		return myVarS;*/
 	}
 	else
 	{

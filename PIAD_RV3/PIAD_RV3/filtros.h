@@ -13,6 +13,9 @@
 #include "mod.filtro.h"
 #include "ctrl_multimedia.h"
 #include "mod.saveData.h"
+#define E 2.71828182845904523536;
+# define M_PI 3.14159265358979323846;  /* pi */
+
 
 //#pragma comment(lib,"opencv_world310d.lib")
 
@@ -129,32 +132,202 @@ void sepia(uchar *p, uchar *q, int j, bool activar)
 		q[j + 2] = valRed;
 	}
 }
-float calculate_sigma()
-{
-	float sigma = 0;
 
-	return sigma;
+
+void calculate_sigma(float sigma, int filter[])
+{
+	//float sigma = 0.75;
+	float operation1 = -1 * ((pow(-1, 2) + pow(-1, 2)) / pow(sigma, 2));
+	float operation2 = -1 * ((pow(-1, 2) + pow(0, 2)) / pow(sigma, 2));
+	float operation3 = -1 * ((pow(0, 2) + pow(0, 2)) / pow(sigma, 2));
+	float e = E;
+	float pi = M_PI;
+	float operation1_1 = ((2 * pi)*(pow(sigma, 2)));
+	float result1 = ((pow(e, operation1) != 0) ? (pow(e, operation1)) : 1) / operation1_1;
+	float result2 = ((pow(e, operation2) != 0) ? (pow(e, operation2)) : 1) / operation1_1;
+	float result3 = ((pow(e, operation3) != 0) ? (pow(e, operation3)) : 1) / operation1_1;
+	float min = 0;
+	
+	(result1 > 255) ? result1 = 255.0 : result1 = result1;
+	(result1 < 0) ? result1 = 0.0 : result1 = result1;
+	(result2 > 255) ? result2 = 255.0 : result1 = result2;
+	(result2 < 0) ? result2 = 0.0 : result2 = result2;
+	(result3> 255) ? result3 = 255.0 : result1 = result3;
+	(result3 < 0) ? result3 = 0.0 : result3 = result3;
+
+	if (result1 < result2 && result1 < result3)			min = result1;
+	else if (result2 < result1 && result2 < result3)	min = result2;
+	else if (result3 < result1 && result3 < result2)	min = result3;
+	result1 = result1 / min;
+	result2 = result2 / min;
+	result3 = result3 / min;
+
+	filter[0] = result1; filter[1] = result2; filter[2] = result1;
+	filter[3] = result2; filter[4] = result3; filter[5] = result2;
+	filter[6] = result1; filter[7] = result2; filter[8] = result1;
 }
-void gausiano(uchar *p, uchar *q, int j, bool activar)
+void insertionSort(int window[])
 {
-	if (activar)
+	int temp, i, j;
+	for (i = 0; i < 9; i++) {
+		temp = window[i];
+		for (j = i - 1; j >= 0 && temp < window[j]; j--) {
+			window[j + 1] = window[j];
+		}
+		window[j + 1] = temp;
+	}
+}
+int FloorPixel(int i)
+{
+	if (i >= 255) { i = 255; }
+	else if (i <= 0) { i = 0; }
+	return i;
+}
+
+void aplicar_matriz_a_imagen(Mat *principal, int matriz_filtro[])
+{
+	Mat matClone = principal->clone();
+	int matriz_filtroRadius = sqrt(sizeof(matriz_filtro) + 1);
+	int matriz_filtroCenter = (matriz_filtroRadius / 2) + 1;
+	int DIV = 0;
+
+	// Generar DIV
+	for (int i = 0; i <= sizeof(matriz_filtro); i++)
 	{
-		nombreFiltro = "Gaussiano";
-		int valBlue =	((p[j + 2] + 1) +		(p[j + 1] + 2) + (p[j] + 1));
-		int valGreen =	((p[j + 2] + 2) +	(p[j + 1] + 7) + (p[j] + 2));
-		int valRed =	((p[j + 2] + 1) +		(p[j + 1] + 2) + (p[j] + 1));
+		DIV += matriz_filtro[i];
+	}
 
-		corte_saturacion(&valBlue);
-		corte_saturacion(&valGreen);
-		corte_saturacion(&valRed);
+	if (DIV <= 0) { DIV = 1; }
 
-		//b
-		q[j] = valBlue;
-		//g
-		q[j + 1] = valGreen;
-		//r		   
-		q[j + 2] = valRed;
-		
+	int columns = matClone.cols * matClone.channels();
+	for (int matRow = 1; matRow < matClone.rows - 1; matRow++)
+	{
+		uchar *filaPrincipal = principal->ptr<uchar>(matRow);
+		for (int matColumn = 3; matColumn < columns - 3; matColumn += 3)
+		{
+			int Red = 0, Blue = 0, Green = 0;
+
+			// Procesar matriz_filtro
+			for (int matriz_filtroRow = 0; matriz_filtroRow < matriz_filtroRadius; matriz_filtroRow++)
+			{
+				int row = matRow + (matriz_filtroRow - (matriz_filtroCenter - 1));
+				uchar *clonarFila = matClone.ptr<uchar>(row);
+
+				for (int matriz_filtroColumn = 0; matriz_filtroColumn < matriz_filtroRadius; matriz_filtroColumn++)
+				{
+					int column = matColumn + ((matriz_filtroColumn - (matriz_filtroCenter - 1)) * 3);
+
+					int indexmatriz_filtro = (matriz_filtroRow * matriz_filtroRadius) + matriz_filtroColumn;
+					int currentCellmatriz_filtro = matriz_filtro[indexmatriz_filtro];
+
+					Blue += (clonarFila[column] * currentCellmatriz_filtro);
+					Green += (clonarFila[column + 1] * currentCellmatriz_filtro);
+					Red += (clonarFila[column + 2] * currentCellmatriz_filtro);
+				}
+			}
+
+			Blue = Blue / DIV;
+			Green = Green / DIV;
+			Red = Red / DIV;
+
+			filaPrincipal[matColumn] = FloorPixel(Blue);
+			filaPrincipal[matColumn + 1] = FloorPixel(Green);
+			filaPrincipal[matColumn + 2] = FloorPixel(Red);
+		}
+	}
+	
+}
+void gausiano( bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.gaussiano);
+}
+void sustraccionMedia(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.sustraccionMedia);
+}
+void media(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.media);
+}
+void laplaciano(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.laplaciano);
+}
+void menosLaplaciano(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.menosLaplaciano);
+}
+void direccionNorteSur(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.direccionNorteSur);
+}
+void direccionEsteOeste(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.direccionEsteOeste);
+}
+void sobelC(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.sobelC);
+}
+void sobelF(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.sobelF);
+}
+void mat()
+{
+	dbx_filtrado.cerrar_dialogo = false;
+	bool iniciar_filtrado = true;
+	Mat dst; Mat src;
+	// Load an image
+	src = imread("C:\\DATA\\original.png", CV_LOAD_IMAGE_GRAYSCALE);
+	//create a sliding window of size 9
+	int window[9];
+
+	dst = src.clone();
+	for (int y = 0; y < src.rows; y++)
+		for (int x = 0; x < src.cols; x++)
+			dst.at<uchar>(y, x) = 0.0;
+
+	dbx_filtrado.cerrar_dialogo = false;
+
+	while (iniciar_filtrado)
+	{
+	for (int y = 1; y < src.rows - 1; y++) {
+		for (int x = 1; x < src.cols - 1; x++) {
+
+			// Pick up window element
+
+			window[0] = src.at<uchar>(y - 1, x - 1);
+			window[1] = src.at<uchar>(y, x - 1);
+			window[2] = src.at<uchar>(y + 1, x - 1);
+			window[3] = src.at<uchar>(y - 1, x);
+			window[4] = src.at<uchar>(y, x);
+			window[5] = src.at<uchar>(y + 1, x);
+			window[6] = src.at<uchar>(y - 1, x + 1);
+			window[7] = src.at<uchar>(y, x + 1);
+			window[8] = src.at<uchar>(y + 1, x + 1);
+
+			// sort the window to find median
+			insertionSort(window);
+
+			// assign the median to centered element of the matrix
+			dst.at<uchar>(y, x) = window[4];
+		}
+	}
+
+	namedWindow("final");
+	imshow("final", dst);
+
+	namedWindow("initial");
+	imshow("initial", src);
+
+
+		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
+		{
+			cvDestroyWindow("final");
+			cvDestroyWindow("initial");
+			break;
+		}
 	}
 }
 
@@ -175,6 +348,7 @@ void cargar_imagen(cv::String path)
 		MessageBoxA(0, "No se pudo cargar la imagen :c", "", 0);
 }
 bool cameraOpen = false;
+
 void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 {
 		//de lo leido por la camara obtenemos la cantidad de
@@ -194,27 +368,42 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 
 		//punteros para manejar a la imagen
 		uchar *p, *q;
+		int chanelsRGB = 3;
 		for (i = 0; i < nRows; i++)
 		{
 			p = frame.ptr<uchar>(i);
 			q = frame2.ptr<uchar>(i);
 
-			for (j = 0; j < nCols; j += 3)
+			for (j = 0; j < nCols; j += chanelsRGB)
 			{
 				copia(p, q, j);
 				luminancia(p, q, j, objFiltro.propFiltro[objFiltro.flt_luminancia].activado);
 				luminosidad(p, q, j, nCols, objFiltro.propFiltro[objFiltro.flt_luminosidad].activado);
 				promedio(p, q, j, objFiltro.propFiltro[objFiltro.flt_promedio].activado);
 				sepia(p, q, j, objFiltro.propFiltro[objFiltro.flt_sepia].activado);
-				gausiano(p, q, j, objFiltro.propFiltro[objFiltro.flt_gaussiano].activado);
-
-
+				
 			}
 		}
-		
-		imshow("Imagen sin filtrar", frame);
-		if (formaFiltrado != objFiltro.reconocimiento_de_personas)
-			imshow("Imagen filtrada", frame2);
+		gausiano( objFiltro.propFiltro[objFiltro.flt_gaussiano].activado, &frame2);
+		sustraccionMedia(objFiltro.propFiltro[objFiltro.flt_sustraccionMedia].activado, &frame2);
+		laplaciano(objFiltro.propFiltro[objFiltro.flt_laplaciano].activado, &frame2);
+		menosLaplaciano(objFiltro.propFiltro[objFiltro.flt_menosLaplaciano].activado, &frame2);
+		direccionNorteSur(objFiltro.propFiltro[objFiltro.flt_direccionNorteSur].activado, &frame2);
+		direccionEsteOeste(objFiltro.propFiltro[objFiltro.flt_direccionEsteOeste].activado, &frame2);
+		sobelC(objFiltro.propFiltro[objFiltro.flt_sobelC].activado, &frame2);
+		sobelF(objFiltro.propFiltro[objFiltro.flt_sobelF].activado, &frame2);
+
+		if (frame.dims > 0)
+		{
+			imshow("Imagen sin filtrar", frame);
+			if (formaFiltrado != objFiltro.reconocimiento_de_personas)
+				imshow("Imagen filtrada", frame2);
+
+		}
+		else
+		{
+			dbx_filtrado.cerrar_dialogo = true;
+		}
 		
 		if (objFiltro.cargar_imagen_desde_archivo || objFiltro.cargar_imagen_desde_camara)
 		{
@@ -227,13 +416,13 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 					char pathCHAR[255];
 					strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
 					mod_multimedia::imagen::SaveOfPC(frame, pathCHAR);
-					
+
 					MessageBoxA(0, "La imagen original fue guardada con exito", "Guardar imagen", 0);
 				}
 				else
 					MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
-				
-				
+
+
 			}
 			else if (dbx_filtrado.guardar_img_filtrada)
 			{
@@ -250,8 +439,11 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 					MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
 
 			}
+
 		}
+
 }
+
 void obtener_imagen_archivo(char path[255], int formaFiltrado)
 {
 	dbx_filtrado.cerrar_dialogo = false;
@@ -266,18 +458,22 @@ void obtener_imagen_archivo(char path[255], int formaFiltrado)
 		frame = NULL;
 		frame = resize.clone();
 		iniciar_filtrado = true;
-	}
-	else
-	{
-		dbx_filtrado.cerrar_dialogo = true;
-		MessageBoxA(0, "Esta imagen no se puede cargar correctamente, verifique que la dirección o el nombre de la imagen no sean muy largos y/o que estén guardadas con el formato apropiado", "Carga de imagen", 0);
-	}
+		frame2 = frame.clone();
+		
+	
 	dbx_filtrado.cerrar_dialogo = false;
-
-	while (iniciar_filtrado)
+	//calculate_sigma(0.75, matSigma);
+	objFiltro.matrices.calculate_sigma(0.28, objFiltro.matrices.gaussiano);
+	
+	while (true)
 	{
 		
-			filtrar(frame, frame2, formaFiltrado);
+		filtrar(frame, frame2, formaFiltrado);
+		//mat(frame, frame2);
+		//mat();
+		
+		
+		//gausiano(frame, frame2, formaFiltrado);
 		
 		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
 		{
@@ -285,6 +481,13 @@ void obtener_imagen_archivo(char path[255], int formaFiltrado)
 			cvDestroyWindow("Imagen filtrada");
 			break;
 		}
+	}
+	}
+	else
+	{
+		MessageBoxA(0, "NO OK", "OK", 0);
+		dbx_filtrado.cerrar_dialogo = true;
+		MessageBoxA(0, "Esta imagen no se puede cargar correctamente, verifique que la dirección o el nombre de la imagen no sean muy largos y/o que estén guardadas con el formato apropiado", "Carga de imagen", 0);
 	}
 }
 void obtener_imagen_desde_camara()

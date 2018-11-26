@@ -192,7 +192,7 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				{
 					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
 					SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
-					if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
+					if (opcion_elegida == objFiltro.cargar_imagen_desde_camara)
 					{
 						obtener_imagen_desde_camara();
 					}
@@ -239,26 +239,40 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 				case BTN_EXAMINAR:
 				{
+					char pathCHAR[255];
 					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
 					LPCWSTR path = NULL;
-					if (opcion_elegida == objFiltro.cargar_imagen_desde_camara)
+					LPCSTR str;// = existingstr.c_str();
+					string path_s;
+					
+					if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo) //objFiltro.cargar_imagen_desde_camara)
 					{
 						 path = getPathToImage(hWnd);
+						 strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
+						 //SetWindowTextA(txt_path, pathCHAR);
+						 SetWindowTextA(txt_path, (LPCSTR)pathCHAR);
+						 MessageBoxA(0, pathCHAR, "", 0);
 					}else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
 					{
 						path = getPathToVideo(hWnd);
+						strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
+						//path_s = path;
+						//SetWindowTextA(txt_path, pathCHAR);
+						SetWindowTextA(txt_path, (LPCSTR)pathCHAR);
+						MessageBoxA(0, pathCHAR, "", 0);
 					}
 					
-					if (path != NULL)
+					if (strcmp(pathCHAR, "")!=0)
 					{
-						char pathCHAR[255];
-						strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
-						SetWindowTextA(txt_path, (LPCSTR)pathCHAR);
+						//char pathCHAR[255];
+						//strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
+						//SetWindowTextA(txt_path, (LPCSTR)pathCHAR);
 						SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
 						EnableWindow(btn_guardar_normal, true);
 						EnableWindow(btn_guardar_filtrada, true);
 						
-						if (opcion_elegida == objFiltro.cargar_imagen_desde_camara)
+						
+						if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
 						{
 							obtener_imagen_archivo(pathCHAR, objFiltro.cargar_imagen_desde_archivo);
 						}
@@ -272,12 +286,43 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						//picNormal.setImagen((HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 300, 300, LR_LOADFROMFILE));
 						//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)picNormal.getImagen());
 					}
+					else
+						MessageBoxA(0, "Direccion vacia", "Cargar", 0);
+
 					
 					break;
 				}
 				case BTN_RECARGAR:
 				{
-					
+					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+					char pathCHAR[255];
+					GetWindowTextA(txt_path, pathCHAR, 255);
+					MessageBoxA(0, pathCHAR, "", 0);
+					if (strcmp(pathCHAR, "") != 0)
+					{
+						
+						SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
+						EnableWindow(btn_guardar_normal, true);
+						EnableWindow(btn_guardar_filtrada, true);
+
+
+						if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
+						{
+							obtener_imagen_archivo(pathCHAR, objFiltro.cargar_imagen_desde_archivo);
+						}
+						else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
+						{
+							obtener_video_archivo(pathCHAR, objFiltro.cargar_video_desde_archivo);
+						}
+
+						//start_record(hWnd, picNormal, picFiltrada, objFiltro.cargar_imagen_desde_archivo, pathCHAR);
+						//ctrl_filtros::modes::imagen_desde_archivo(pathCHAR);
+						//picNormal.setImagen((HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 300, 300, LR_LOADFROMFILE));
+						//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)picNormal.getImagen());
+					}
+					else
+						MessageBoxA(0, "Direccion vacia", "Cargar", 0);
+
 					
 					/*
 					char pathCHAR[255];
@@ -288,6 +333,10 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				
 				case BTN_APLICAR_FILTRO:
 				{
+					
+					//calculate_sigma(0.1, matSigma);
+					//int c = 0;
+					//mat();
 					//DialogBox(dbx_menu.hInst, MAKEINTRESOURCE(DBX_CONSOLE), NULL, reinterpret_cast<DLGPROC>(call_console));
 					//lbx_console = GetDlgItem(hWnd_dbx_console, LBX_CONSOLE);
 					//SendMessageA(lbx_console, LB_INSERTSTRING, 0, (LPARAM)"ctrl_dbx_filtros");
