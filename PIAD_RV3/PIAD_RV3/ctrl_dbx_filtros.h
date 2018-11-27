@@ -239,30 +239,29 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 				case BTN_EXAMINAR:
 				{
-					char pathCHAR[255];
+					//char pathCHAR[255];
 					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
-					LPCWSTR path = NULL;
-					LPCSTR str;// = existingstr.c_str();
-					string path_s;
-					
+					//LPCWSTR path = NULL;
+					//LPCSTR str;// = existingstr.c_str();
+					std:string path = "";
 					if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo) //objFiltro.cargar_imagen_desde_camara)
 					{
 						 path = getPathToImage(hWnd);
-						 strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
+						 //strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
 						 //SetWindowTextA(txt_path, pathCHAR);
-						 SetWindowTextA(txt_path, (LPCSTR)pathCHAR);
-						 MessageBoxA(0, pathCHAR, "", 0);
+						 SetWindowTextA(txt_path, path.c_str());
+						// MessageBoxA(0, path.c_str(), "", 0);
 					}else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
 					{
 						path = getPathToVideo(hWnd);
-						strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
+						//strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
 						//path_s = path;
 						//SetWindowTextA(txt_path, pathCHAR);
-						SetWindowTextA(txt_path, (LPCSTR)pathCHAR);
-						MessageBoxA(0, pathCHAR, "", 0);
+						SetWindowTextA(txt_path, path.c_str());
+						//MessageBoxA(0, path.c_str(), "", 0);
 					}
 					
-					if (strcmp(pathCHAR, "")!=0)
+					if (path != "")
 					{
 						//char pathCHAR[255];
 						//strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
@@ -274,11 +273,13 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						
 						if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
 						{
-							obtener_imagen_archivo(pathCHAR, objFiltro.cargar_imagen_desde_archivo);
+							
+							obtener_imagen_archivo(path, objFiltro.cargar_imagen_desde_archivo);
 						}
 						else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
 						{
-							obtener_video_archivo(pathCHAR, objFiltro.cargar_video_desde_archivo);
+							
+							obtener_video_archivo(path, objFiltro.cargar_video_desde_archivo);
 						}
 						
 						//start_record(hWnd, picNormal, picFiltrada, objFiltro.cargar_imagen_desde_archivo, pathCHAR);
@@ -345,12 +346,50 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				
 				case BTN_GUARDAR_NORMAL:
 				{
-					dbx_filtrado.guardar_img_original = true;
+					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+					if (
+						opcion_elegida == objFiltro.cargar_imagen_desde_archivo ||
+						opcion_elegida == objFiltro.cargar_imagen_desde_camara
+						)
+					{
+						dbx_filtrado.guardar_img_original = true;
+					}
+					else if (
+						opcion_elegida == objFiltro.cargar_video_desde_archivo ||
+						opcion_elegida == objFiltro.cargar_video_desde_camara
+						)
+					{
+						dbx_filtrado.guardar_vid_original = !dbx_filtrado.guardar_vid_original;
+						if (dbx_filtrado.guardar_vid_original)
+							SetWindowTextA(btn_guardar_normal, "Grabando...");
+						else
+							SetWindowTextA(btn_guardar_normal, "Dejar de grabar");
+					}
+						
 					break;
 				}
 				case BTN_GUARDAR_FILTRADA:
 				{	
-					dbx_filtrado.guardar_img_filtrada = true;
+					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+					if (
+						opcion_elegida == objFiltro.cargar_imagen_desde_archivo ||
+						opcion_elegida == objFiltro.cargar_imagen_desde_camara
+						)
+					{
+						dbx_filtrado.guardar_img_filtrada = true;
+					}
+					else if (
+						opcion_elegida == objFiltro.cargar_video_desde_archivo ||
+						opcion_elegida == objFiltro.cargar_video_desde_camara
+						)
+					{
+						dbx_filtrado.guardar_vid_filtrada = !dbx_filtrado.guardar_vid_filtrada;
+						if (dbx_filtrado.guardar_vid_filtrada)
+							SetWindowTextA(btn_guardar_filtrada, "Grabando...");
+						else
+							SetWindowTextA(btn_guardar_filtrada, "Dejar de grabar");
+
+					}
 					break;
 				}
 			}

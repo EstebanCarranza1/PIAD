@@ -5,19 +5,19 @@
 #include <windows.h>
 #include <tchar.h>  
 #include "convert.h"
+//#include <commDlg.h>
 #include <string>
-
-OPENFILENAME ofn;       // common dialog box structure
-TCHAR szFile[260] = { 0 };       // if using TCHAR macros
-
-								 // Initialize OPENFILENAME
-LPCWSTR getPathToImage(HWND hWnd)
-{
 	
+using namespace std;
+string getPathToImage(HWND hWnd)
+{
+	OPENFILENAME ofn;       // common dialog box structure
+	CHAR szFile[260];// = { 0 }; // if using TCHAR macros					 // Initialize OPENFILENAME
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = hWnd;
 	ofn.lpstrFile = szFile;
+	ofn.lpstrFile[0] = '\0';
 	ofn.nMaxFile = sizeof(szFile);
 	//ofn.lpstrFilter = _T("Imagenes BMP\0*.bmp\0 Todos los archivos \0*.*\0");
 	ofn.lpstrFilter = _T("Imagenes PNG \0*.png\0 Imagenes BMP\0*.bmp\0 Imagenes JPG \0*.jpg\0");
@@ -27,23 +27,24 @@ LPCWSTR getPathToImage(HWND hWnd)
 	ofn.lpstrInitialDir = NULL;
 	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-	if (GetOpenFileName(&ofn) == TRUE)
+	if (GetOpenFileNameA(&ofn) == TRUE)
 	{
-		return ofn.lpstrFile;
-		/*wstring ws(ofn.lpstrFile);
-		string myVarS = string(ws.begin(), ws.end());
-		return myVarS;*/
+		std::string data = std::string(szFile);
+		return data;
+		//return data;// ofn.lpstrFile;
+		
 	}
 	else
 	{
-		MessageBox(0, L"No se eligió archivo", L"Abrir imagen", NULL);
+		MessageBox(0, "No se eligió archivo", "Abrir imagen", NULL);
 		dbx_filtrado.imagen_obtenida = false;
-		return NULL;
+		return "";
 	}
-	return NULL;
 }
-LPCWSTR getPathToVideo(HWND hWnd)
+string getPathToVideo(HWND hWnd)
 {
+	OPENFILENAME ofn;       // common dialog box structure
+	TCHAR szFile[260];// = { 0 };       // if using TCHAR macros
 	//CHAR szFile[MAX_PATH];
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
@@ -61,22 +62,26 @@ LPCWSTR getPathToVideo(HWND hWnd)
 
 	if (GetOpenFileName(&ofn) == TRUE)
 	{
-		return ofn.lpstrFile;
+		std::string data = std::string(szFile);
+		//return ofn.lpstrFile;
+		return data;
 		/*wstring ws(ofn.lpstrFile);
 		string myVarS = string(ws.begin(), ws.end());
 		return myVarS;*/
 	}
 	else
 	{
-		MessageBox(0, L"No se eligió archivo", L"Abrir imagen", NULL);
+		MessageBox(0, "No se eligió archivo", "Abrir imagen", NULL);
 		dbx_filtrado.imagen_obtenida = false;
-		return NULL;
+		return "";
 	}
-	return NULL;
-}
-LPCWSTR getPathToSave(HWND hWnd)
-{
 
+}
+
+string getPathToSaveImage(HWND hWnd)
+{
+	OPENFILENAME ofn;       // common dialog box structure
+	TCHAR szFile[260] = { 0 };       // if using TCHAR macros
 	ZeroMemory(&ofn, sizeof(ofn));
 	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = hWnd;
@@ -92,13 +97,14 @@ LPCWSTR getPathToSave(HWND hWnd)
 
 	if (GetSaveFileName(&ofn) == TRUE)
 	{
-		return ofn.lpstrFile;
+		std::string data = std::string(szFile) + ".png";
+		//return ofn.lpstrFile;
+		return data;
 	}
 	else
 	{
-		MessageBox(0, L"No se eligió archivo", L"Abrir imagen", NULL);
+		MessageBox(0, "No se eligió archivo", "Abrir imagen", NULL);
 		dbx_filtrado.imagen_obtenida = false;
-		return NULL;
+		return "";
 	}
-	return NULL;
 }

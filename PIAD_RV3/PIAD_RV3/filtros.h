@@ -184,62 +184,68 @@ int FloorPixel(int i)
 	return i;
 }
 
-void aplicar_matriz_a_imagen(Mat *principal, int matriz_filtro[])
+void aplicar_matriz_a_imagen( Mat *principal, int matriz_filtro[])
 {
-	Mat matClone = principal->clone();
-	int matriz_filtroRadius = sqrt(sizeof(matriz_filtro) + 1);
-	int matriz_filtroCenter = (matriz_filtroRadius / 2) + 1;
-	int DIV = 0;
+	
+		Mat matClone = principal->clone();
+		int matriz_filtroRadius = sqrt(sizeof(matriz_filtro) + 1);
+		int matriz_filtroCenter = (matriz_filtroRadius / 2) + 1;
+		int DIV = 0;
 
-	// Generar DIV
-	for (int i = 0; i <= sizeof(matriz_filtro); i++)
-	{
-		DIV += matriz_filtro[i];
-	}
-
-	if (DIV <= 0) { DIV = 1; }
-
-	int columns = matClone.cols * matClone.channels();
-	for (int matRow = 1; matRow < matClone.rows - 1; matRow++)
-	{
-		uchar *filaPrincipal = principal->ptr<uchar>(matRow);
-		for (int matColumn = 3; matColumn < columns - 3; matColumn += 3)
+		// Generar DIV
+		for (int i = 0; i <= sizeof(matriz_filtro); i++)
 		{
-			int Red = 0, Blue = 0, Green = 0;
-
-			// Procesar matriz_filtro
-			for (int matriz_filtroRow = 0; matriz_filtroRow < matriz_filtroRadius; matriz_filtroRow++)
-			{
-				int row = matRow + (matriz_filtroRow - (matriz_filtroCenter - 1));
-				uchar *clonarFila = matClone.ptr<uchar>(row);
-
-				for (int matriz_filtroColumn = 0; matriz_filtroColumn < matriz_filtroRadius; matriz_filtroColumn++)
-				{
-					int column = matColumn + ((matriz_filtroColumn - (matriz_filtroCenter - 1)) * 3);
-
-					int indexmatriz_filtro = (matriz_filtroRow * matriz_filtroRadius) + matriz_filtroColumn;
-					int currentCellmatriz_filtro = matriz_filtro[indexmatriz_filtro];
-
-					Blue += (clonarFila[column] * currentCellmatriz_filtro);
-					Green += (clonarFila[column + 1] * currentCellmatriz_filtro);
-					Red += (clonarFila[column + 2] * currentCellmatriz_filtro);
-				}
-			}
-
-			Blue = Blue / DIV;
-			Green = Green / DIV;
-			Red = Red / DIV;
-
-			filaPrincipal[matColumn] = FloorPixel(Blue);
-			filaPrincipal[matColumn + 1] = FloorPixel(Green);
-			filaPrincipal[matColumn + 2] = FloorPixel(Red);
+			DIV += matriz_filtro[i];
 		}
-	}
+
+		if (DIV <= 0) { DIV = 1; }
+
+		int columns = matClone.cols * matClone.channels();
+		for (int matRow = 1; matRow < matClone.rows - 1; matRow++)
+		{
+			uchar *filaPrincipal = principal->ptr<uchar>(matRow);
+			for (int matColumn = 3; matColumn < columns - 3; matColumn += 3)
+			{
+				int Red = 0, Blue = 0, Green = 0;
+
+				// Procesar matriz_filtro
+				for (int matriz_filtroRow = 0; matriz_filtroRow < matriz_filtroRadius; matriz_filtroRow++)
+				{
+					int row = matRow + (matriz_filtroRow - (matriz_filtroCenter - 1));
+					uchar *clonarFila = matClone.ptr<uchar>(row);
+
+					for (int matriz_filtroColumn = 0; matriz_filtroColumn < matriz_filtroRadius; matriz_filtroColumn++)
+					{
+						int column = matColumn + ((matriz_filtroColumn - (matriz_filtroCenter - 1)) * 3);
+
+						int indexmatriz_filtro = (matriz_filtroRow * matriz_filtroRadius) + matriz_filtroColumn;
+						int currentCellmatriz_filtro = matriz_filtro[indexmatriz_filtro];
+
+						Blue += (clonarFila[column] * currentCellmatriz_filtro);
+						Green += (clonarFila[column + 1] * currentCellmatriz_filtro);
+						Red += (clonarFila[column + 2] * currentCellmatriz_filtro);
+					}
+				}
+
+				Blue = Blue / DIV;
+				Green = Green / DIV;
+				Red = Red / DIV;
+
+				filaPrincipal[matColumn] = FloorPixel(Blue);
+				filaPrincipal[matColumn + 1] = FloorPixel(Green);
+				filaPrincipal[matColumn + 2] = FloorPixel(Red);
+			}
+		}
+	
 	
 }
 void gausiano( bool activar, Mat *frame2)
 {
-	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.gaussiano);
+	if (activar) {
+		//objFiltro.matrices.calculate_sigma(0.75, objFiltro.matrices.gaussiano);
+		aplicar_matriz_a_imagen(frame2, objFiltro.matrices.gaussiano);
+
+	}
 }
 void sustraccionMedia(bool activar, Mat *frame2)
 {
@@ -248,6 +254,10 @@ void sustraccionMedia(bool activar, Mat *frame2)
 void media(bool activar, Mat *frame2)
 {
 	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.media);
+}
+void mediaPonderada(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.mediaPonderada);
 }
 void laplaciano(bool activar, Mat *frame2)
 {
@@ -272,6 +282,14 @@ void sobelC(bool activar, Mat *frame2)
 void sobelF(bool activar, Mat *frame2)
 {
 	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.sobelF);
+}
+void repujado(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.repujado);
+}
+void sharpening(bool activar, Mat *frame2)
+{
+	if (activar) aplicar_matriz_a_imagen(frame2, objFiltro.matrices.sharpening);
 }
 void mat()
 {
@@ -351,100 +369,84 @@ bool cameraOpen = false;
 
 void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 {
-		//de lo leido por la camara obtenemos la cantidad de
-		//canales, 3 por ser rgb
-		int channels = frame.channels();
-		//clonamos al frame leido con la intencion de obtener
-		//sus caracteristicas de ancho, alto, canales
-		frame2 = frame.clone();
-		//convertimos a gris para manejar un solo canal
-		//cvtColor(frame2, gris, CV_BGR2GRAY);
-		//obtenemos las filas de la imagen
-		int nRows = frame.rows;
-		//las columnas efectivas de la imagen
-		int nCols = frame.cols * channels;
-
-		int i, j, k = 0;
-
-		//punteros para manejar a la imagen
-		uchar *p, *q;
-		int chanelsRGB = 3;
-		for (i = 0; i < nRows; i++)
+	//de lo leido por la camara obtenemos la cantidad de
+	//canales, 3 por ser rgb
+	int channels = frame.channels();
+	//clonamos al frame leido con la intencion de obtener
+	//sus caracteristicas de ancho, alto, canales
+	frame2 = frame.clone();
+	//convertimos a gris para manejar un solo canal
+	//cvtColor(frame2, gris, CV_BGR2GRAY);
+	//obtenemos las filas de la imagen
+	int nRows = frame.rows;
+	//las columnas efectivas de la imagen
+	int nCols = frame.cols * channels;
+	int i, j, k = 0;
+	//punteros para manejar a la imagen
+	uchar *p, *q;
+	int chanelsRGB = 3;
+	for (i = 0; i < nRows; i++)
+	{
+		p = frame.ptr<uchar>(i);
+		q = frame2.ptr<uchar>(i);
+		for (j = 0; j < nCols; j += chanelsRGB)
 		{
-			p = frame.ptr<uchar>(i);
-			q = frame2.ptr<uchar>(i);
+			copia(p, q, j);
+			luminancia(p, q, j, objFiltro.propFiltro[objFiltro.flt_luminancia].activado);
+			luminosidad(p, q, j, nCols, objFiltro.propFiltro[objFiltro.flt_luminosidad].activado);
+			promedio(p, q, j, objFiltro.propFiltro[objFiltro.flt_promedio].activado);
+			sepia(p, q, j, objFiltro.propFiltro[objFiltro.flt_sepia].activado);
+		}
+	}
+	media(objFiltro.propFiltro[objFiltro.flt_media].activado, &frame2);
+	mediaPonderada(objFiltro.propFiltro[objFiltro.flt_mediaPonderada].activado, &frame2);
+	gausiano( objFiltro.propFiltro[objFiltro.flt_gaussiano].activado, &frame2);
+	sustraccionMedia(objFiltro.propFiltro[objFiltro.flt_sustraccionMedia].activado, &frame2);
+	laplaciano(objFiltro.propFiltro[objFiltro.flt_laplaciano].activado, &frame2);
+	menosLaplaciano(objFiltro.propFiltro[objFiltro.flt_menosLaplaciano].activado, &frame2);
+	direccionNorteSur(objFiltro.propFiltro[objFiltro.flt_direccionNorteSur].activado, &frame2);
+	direccionEsteOeste(objFiltro.propFiltro[objFiltro.flt_direccionEsteOeste].activado, &frame2);
+	sobelC(objFiltro.propFiltro[objFiltro.flt_sobelC].activado, &frame2);
+	sobelF(objFiltro.propFiltro[objFiltro.flt_sobelF].activado, &frame2);
+	repujado(objFiltro.propFiltro[objFiltro.flt_repujado].activado, &frame2);
+	sharpening(objFiltro.propFiltro[objFiltro.flt_sharpening].activado, &frame2);
 
-			for (j = 0; j < nCols; j += chanelsRGB)
-			{
-				copia(p, q, j);
-				luminancia(p, q, j, objFiltro.propFiltro[objFiltro.flt_luminancia].activado);
-				luminosidad(p, q, j, nCols, objFiltro.propFiltro[objFiltro.flt_luminosidad].activado);
-				promedio(p, q, j, objFiltro.propFiltro[objFiltro.flt_promedio].activado);
-				sepia(p, q, j, objFiltro.propFiltro[objFiltro.flt_sepia].activado);
+	if (frame.dims > 0 && frame2.dims > 0)
+	{
+		imshow("Imagen sin filtrar", frame);
+		if (formaFiltrado != objFiltro.reconocimiento_de_personas)
+			imshow("Imagen filtrada", frame2);
+	}
+	else dbx_filtrado.cerrar_dialogo = true;
 				
-			}
-		}
-		gausiano( objFiltro.propFiltro[objFiltro.flt_gaussiano].activado, &frame2);
-		sustraccionMedia(objFiltro.propFiltro[objFiltro.flt_sustraccionMedia].activado, &frame2);
-		laplaciano(objFiltro.propFiltro[objFiltro.flt_laplaciano].activado, &frame2);
-		menosLaplaciano(objFiltro.propFiltro[objFiltro.flt_menosLaplaciano].activado, &frame2);
-		direccionNorteSur(objFiltro.propFiltro[objFiltro.flt_direccionNorteSur].activado, &frame2);
-		direccionEsteOeste(objFiltro.propFiltro[objFiltro.flt_direccionEsteOeste].activado, &frame2);
-		sobelC(objFiltro.propFiltro[objFiltro.flt_sobelC].activado, &frame2);
-		sobelF(objFiltro.propFiltro[objFiltro.flt_sobelF].activado, &frame2);
-
-		if (frame.dims > 0)
+	if (objFiltro.cargar_imagen_desde_archivo || objFiltro.cargar_imagen_desde_camara)
+	{
+		if (dbx_filtrado.guardar_img_original)
 		{
-			imshow("Imagen sin filtrar", frame);
-			if (formaFiltrado != objFiltro.reconocimiento_de_personas)
-				imshow("Imagen filtrada", frame2);
-
-		}
-		else
-		{
-			dbx_filtrado.cerrar_dialogo = true;
-		}
-		
-		if (objFiltro.cargar_imagen_desde_archivo || objFiltro.cargar_imagen_desde_camara)
-		{
-			if (dbx_filtrado.guardar_img_original)
+			dbx_filtrado.guardar_img_original = false;
+			std::string path = getPathToSaveImage(0);
+			if (path != "")
 			{
-				dbx_filtrado.guardar_img_original = false;
-				LPCWSTR path = getPathToSave(0);
-				if (path != NULL)
-				{
-					char pathCHAR[255];
-					strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
-					mod_multimedia::imagen::SaveOfPC(frame, pathCHAR);
-
-					MessageBoxA(0, "La imagen original fue guardada con exito", "Guardar imagen", 0);
-				}
-				else
-					MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
-
-
+				if (mod_multimedia::imagen::SaveOfPC(frame, path) == 0)	MessageBoxA(0, "La imagen original fue guardada con exito", "Guardar imagen", 0);
+				else MessageBoxA(0, "Hubo un error al guardar", "Guardar imagen", 0);
 			}
-			else if (dbx_filtrado.guardar_img_filtrada)
-			{
-				dbx_filtrado.guardar_img_filtrada = false;
-				LPCWSTR path = getPathToSave(0);
-				if (path != NULL)
-				{
-					char pathCHAR[255];
-					strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
-					mod_multimedia::imagen::SaveOfPC(frame2, pathCHAR);
-					MessageBoxA(0, "La imagen original fue guardada con exito", "Guardar imagen", 0);
-				}
-				else
-					MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
-
-			}
-
+			else MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
 		}
-
+		else if (dbx_filtrado.guardar_img_filtrada)
+		{
+			dbx_filtrado.guardar_img_filtrada = false;
+			std::string path = getPathToSaveImage(0);
+			if (path != "")
+			{
+				if (mod_multimedia::imagen::SaveOfPC(frame2, path) == 0) MessageBoxA(0, "La imagen original fue guardada con exito", "Guardar imagen", 0);
+				else MessageBoxA(0, "Hubo un error al guardar", "Guardar imagen", 0);
+			}
+			else MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
+		}
+	}
 }
 
-void obtener_imagen_archivo(char path[255], int formaFiltrado)
+void obtener_imagen_archivo(std::string path, int formaFiltrado)
 {
 	dbx_filtrado.cerrar_dialogo = false;
 	bool iniciar_filtrado = false;
@@ -459,33 +461,22 @@ void obtener_imagen_archivo(char path[255], int formaFiltrado)
 		frame = resize.clone();
 		iniciar_filtrado = true;
 		frame2 = frame.clone();
-		
-	
-	dbx_filtrado.cerrar_dialogo = false;
-	//calculate_sigma(0.75, matSigma);
-	objFiltro.matrices.calculate_sigma(0.28, objFiltro.matrices.gaussiano);
-	
-	while (true)
-	{
-		
-		filtrar(frame, frame2, formaFiltrado);
-		//mat(frame, frame2);
-		//mat();
-		
-		
-		//gausiano(frame, frame2, formaFiltrado);
-		
-		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
+		dbx_filtrado.cerrar_dialogo = false;
+		//calculate_sigma(0.75, matSigma);
+		while (true)
 		{
-			cvDestroyWindow("Imagen sin filtrar");
-			cvDestroyWindow("Imagen filtrada");
-			break;
+		
+			filtrar(frame, frame2, formaFiltrado);
+			if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
+			{
+				cvDestroyWindow("Imagen sin filtrar");
+				cvDestroyWindow("Imagen filtrada");
+				break;
+			}
 		}
-	}
 	}
 	else
 	{
-		MessageBoxA(0, "NO OK", "OK", 0);
 		dbx_filtrado.cerrar_dialogo = true;
 		MessageBoxA(0, "Esta imagen no se puede cargar correctamente, verifique que la dirección o el nombre de la imagen no sean muy largos y/o que estén guardadas con el formato apropiado", "Carga de imagen", 0);
 	}
@@ -522,18 +513,24 @@ void obtener_imagen_desde_camara()
 		}
 	}
 }
-void obtener_video_archivo(char path[255], int formaFiltrado)
+void obtener_video_archivo(std::string path, int formaFiltrado)
 {
 	dbx_filtrado.cerrar_dialogo = false;
 	CvCapture* capture = NULL;
-	capture = cvCreateFileCapture(path);
+	capture = cvCreateFileCapture(path.c_str());
 	IplImage* frameVid = NULL;
 	Mat frame, frame2;
+	Mat resize;
 	while (1)
 	{
 		frameVid = cvQueryFrame(capture);
 		if (!frameVid) break;
 		frame = cv::cvarrToMat(frameVid);
+		cv::resize(frame, resize, Size(640, 480), 0, 0, INTER_CUBIC);
+		frame = NULL;
+		frame = resize.clone();
+		//iniciar_filtrado = true;
+		frame2 = frame.clone();
 		filtrar(frame, frame2, objFiltro.cargar_video_desde_archivo);
 		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
 		{
@@ -542,8 +539,6 @@ void obtener_video_archivo(char path[255], int formaFiltrado)
 			break;
 		}
 	}
-	
-	
 }
 void obtener_video_desde_camara(int formaFiltrado)
 {
@@ -636,53 +631,3 @@ void reconocimiento_personas(int formaFiltrado)
 		imshow("Detector de Racita", img);
 	}
 }
-
-void start_record(HWND hWnd, mod_picture image, mod_picture imageFiltrada, int formaFiltrado,char path[255])
-{
-	
-	/*
-	//ciclo infinito para la lectura de la camara
-	while (1)
-	{
-		Mat frame, frame2; //aqui guardaremos el frame
-		if(
-			(formaFiltrado == objFiltro.cargar_imagen_desde_camara) ||
-			(formaFiltrado == objFiltro.cargar_video_desde_camara)
-			)
-		{
-		
-				VideoCapture camara(0);
-				if (!camara.isOpened())  // si no se pudo ahi muere, lastima!
-				{
-					cout << "No se pudo abrir la camara" << endl;
-					return;
-				}
-			
-			bool exito = camara.read(frame); // lee un frame
-			if (!exito) //si no se pudo lastima de nuevo
-			{
-				cout << "no pude leer!" << endl;
-				break;
-			}
-		}else if (formaFiltrado == objFiltro.cargar_imagen_desde_archivo)
-		{
-			
-			frame = mod_multimedia::imagen::LoadOfPC(path);
-		}
-		
-		imshow("Imagen sin filtrar", frame);
-		if (formaFiltrado != objFiltro.reconocimiento_de_personas)
-			imshow("Imagen filtrada", frame2);
-		
-
-	
-		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
-		{
-			cout << "juimonos!!" << endl;
-			break;
-		}
-
-	}*/
-}
-
-

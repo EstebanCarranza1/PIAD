@@ -13,5 +13,7 @@ class mod_dialogBox
 	bool imagen_obtenida = false;
 	bool guardar_img_filtrada = false;
 	bool guardar_img_original = false;
+	bool guardar_vid_filtrada = false;
+	bool guardar_vid_original = false;
 	//virtual LRESULT CALLBACK callback(HWND, UINT, WPARAM, LPARAM);
 };

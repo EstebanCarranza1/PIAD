@@ -36,7 +36,9 @@ public:
 		flt_sobelF,
 		flt_menosLaplaciano,
 		flt_direccionNorteSur,
-		flt_direccionEsteOeste
+		flt_direccionEsteOeste,
+		flt_repujado,
+		flt_sharpening
 	};
 	static enum formaFiltrado
 	{
@@ -54,7 +56,7 @@ public:
 		pathFiltro,
 		noDisponible
 	};
-	static const int max_nomFiltro = 16;
+	static const int max_nomFiltro = 18;
 	static const int max_formaFiltrado = 6;
 	static const int max_mensajes = 8;
 	static const int max_recMSG = 4;
@@ -95,6 +97,9 @@ public:
 		strcpy_s(propFiltro[13].titulo, "Menos laplaciano");
 		strcpy_s(propFiltro[14].titulo, "Direccion Norte Sur");
 		strcpy_s(propFiltro[15].titulo, "Direccion Este Oeste");
+		strcpy_s(propFiltro[16].titulo, "Repujado");
+		strcpy_s(propFiltro[17].titulo, "Sharpening");
+
 
 		
 
@@ -126,7 +131,13 @@ public:
 	class matrices
 	{
 		public:
-		int gaussiano[9];
+		int gaussiano[9] =
+		{
+			1,5,1,
+			5,35,5,
+			1,5,1
+
+		};
 		int media[9] =
 		{
 			1, 1, 1,
@@ -136,7 +147,7 @@ public:
 		int mediaPonderada[9] =
 		{
 			1, 1, 1,
-			1, 2, 1,
+			1, 3, 1,
 			1, 1, 1
 		};
 		int sustraccionMedia[9] =
@@ -177,11 +188,28 @@ public:
 		};
 		int sobelF[9] =
 		{
-			-1, -2, 1,
+			-1, -2, -1,
 			0, 0, 0,
 			1, 2, 1
 		};
-
+		int repujado[9] =
+		{
+			-2, 1, 0,
+			-1, 1, 1,
+			0, 1, 2
+		};
+		int sharpening[9] =
+		{
+			-1,-1,-1,
+			-1,9,-1,
+			-1,-1,-1
+			/*1,0,-1,
+			2,0,-2,
+			1,0,-1
+			/*0,0,1,
+			0,1,0,
+			1,0,0*/
+		};
 
 		void elevarPonderacionMedia(int ponderacion)
 		{

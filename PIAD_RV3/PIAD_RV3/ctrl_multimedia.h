@@ -23,11 +23,11 @@ public:
 
 		try {
 
-
+			/*
 			imwrite(image.pathDefault, mat, compression_params);
 			image.setImagen((HBITMAP)LoadImage(NULL, convertCharArrayToLPCWSTR(image.pathDefault), IMAGE_BITMAP, image.getSizeWidth(), image.getSizeHeight(), LR_LOADFROMFILE));
 			SendDlgItemMessage(hWnd, image.id, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)image.getImagen());
-
+			*/
 			return 0;
 		}
 		catch (runtime_error& ex) {
@@ -39,15 +39,16 @@ public:
 	static class imagen
 	{
 	public:
-		static Mat LoadOfPC(char path[255])
+		static Mat LoadOfPC(std::string path)
 		{
-			string imageName = (path); // by default
+			//string imageName = (path); // by default
 			Mat image;
-			image = imread(imageName.c_str(), IMREAD_COLOR); // Read the file
+			image = imread(path.c_str(), IMREAD_COLOR); // Read the file
 			return image;
 		}
-		static int SaveOfPC(Mat mat, char path[255])
+		static int SaveOfPC(Mat mat, string path)
 		{
+			
 			/*
 			vector<int> compression_params;
 			compression_params.push_back(CV_IMWRITE_PNG_COMPRESSION);
@@ -55,7 +56,7 @@ public:
 			try 
 			{
 				//imwrite(path, mat, compression_params);	
-				imwrite(path, mat);
+				imwrite(path.c_str(), mat);
 				return 0;
 			}
 			catch (runtime_error& ex) {
