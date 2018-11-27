@@ -108,3 +108,33 @@ string getPathToSaveImage(HWND hWnd)
 		return "";
 	}
 }
+string getPathToSaveVideo(HWND hWnd)
+{
+	OPENFILENAME ofn;       // common dialog box structure
+	TCHAR szFile[260] = { 0 };       // if using TCHAR macros
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hWnd;
+	ofn.lpstrFile = szFile;
+	ofn.nMaxFile = sizeof(szFile);
+	//ofn.lpstrFilter = _T("Imagenes BMP\0*.bmp\0 Todos los archivos \0*.*\0");
+	ofn.lpstrFilter = _T("Archivo AVI \0*.avi\0");
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFileTitle = NULL;
+	ofn.nMaxFileTitle = 0;
+	ofn.lpstrInitialDir = NULL;
+	ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+	if (GetSaveFileName(&ofn) == TRUE)
+	{
+		std::string data = std::string(szFile) + ".avi";
+		//return ofn.lpstrFile;
+		return data;
+	}
+	else
+	{
+		MessageBox(0, "No se eligió archivo", "Abrir imagen", NULL);
+		dbx_filtrado.imagen_obtenida = false;
+		return "";
+	}
+}

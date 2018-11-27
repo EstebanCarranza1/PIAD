@@ -43,6 +43,7 @@
     <ClInclude Include="OpenFileDialog.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="ventana.h" />
+    <ClInclude Include="VideoGrabador.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PIAD_RV3.rc" />

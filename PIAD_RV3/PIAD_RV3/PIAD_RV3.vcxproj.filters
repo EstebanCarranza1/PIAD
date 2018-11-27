@@ -93,6 +93,9 @@
     <ClInclude Include="OpenBrowserDialog.h">
       <Filter>Archivos de código fuente\view</Filter>
     </ClInclude>
+    <ClInclude Include="VideoGrabador.h">
+      <Filter>Archivos de código fuente\ejemplos</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="PIAD_RV3.rc">

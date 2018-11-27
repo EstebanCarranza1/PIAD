@@ -31,7 +31,7 @@ void habilitar_todo(bool habilitar)
 	EnableWindow(btn_guardar_normal, habilitar);
 	EnableWindow(btn_guardar_filtrada, habilitar);
 }
-
+//VideoCapture camara(0);
 //NOTA: AL MOMENTO DE HACER CLIC EN EL COMBOBOX ENTRA AL EVENTO INFINITAMENTE ASI QUE AL DAR CLIC EN CUALQUIERA DE LOS DOS COMBOBOX SE CICLARA CON EL ULTIMO
 LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -66,7 +66,10 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			SendMessageA(cbx_filtros, CB_SETCURSEL, 0, 0);
 
 			habilitar_todo(false);
-			
+			//timer de 33 milisegs
+			//SetTimer(hWnd, 100, 33, (TIMERPROC)NULL);
+			SetTimer(hWnd, 100, 33, (TIMERPROC)NULL);
+		
 
 			break;
 		}
@@ -82,6 +85,28 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 			{
 
 			}
+			break;
+		}
+		case WM_TIMER:
+		{
+			if (dbx_filtrado.estado_vid_original == 4)
+			{
+				
+				if ((frameClone.dims>0) && (graba != NULL))
+					graba->Graba(frameClone);
+				
+			}
+			else if (dbx_filtrado.estado_vid_original == 2)
+			{
+				if (graba != NULL && dbx_filtrado.estado_vid_original != 0)
+				{
+					dbx_filtrado.estado_vid_original = 0;
+					graba->SalidaDeVideo.release();
+					MessageBox(0, "Grabado", "grabado", 0);
+					
+				}
+			}
+			//time++;
 			break;
 		}
 		case WM_COMMAND:
@@ -132,9 +157,11 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].activado)
 					{
 						dbx_filtrado.cerrar_dialogo = true;
-						habilitar_todo(false);
+						habilitar_todo(true);
 						EnableWindow(btn_iniciar_camara, true);
-						EnableWindow(btn_capturar, true);
+						if(objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].activado)
+							EnableWindow(btn_capturar, true);
+						
 						EnableWindow(cbx_filtros, true);
 						SetWindowTextA(lbl_path, objFiltro.recMSG[objFiltro.pathImagen].nombre);
 						SetWindowTextA(lbl_filtro, objFiltro.recMSG[objFiltro.pathFiltro].nombre);
@@ -192,40 +219,35 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				{
 					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
 					SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
+					if (objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].activado)
+					{
+						EnableWindow(btn_guardar_normal, true);
+						EnableWindow(btn_guardar_filtrada, true);
+						SetWindowTextA(btn_guardar_normal, objFiltro.statMSG[objFiltro.iniciar_grabado_original].nombre);
+						SetWindowTextA(btn_guardar_filtrada, objFiltro.statMSG[objFiltro.iniciar_grabado_filtrado].nombre);
+					}
 					if (opcion_elegida == objFiltro.cargar_imagen_desde_camara)
 					{
 						obtener_imagen_desde_camara();
+					}
+					else if (opcion_elegida == objFiltro.cargar_video_desde_camara)
+					{
+						obtener_video_desde_camara(objFiltro.cargar_video_desde_camara);
 					}
 					else if (opcion_elegida == objFiltro.reconocimiento_de_personas)
 					{
 						reconocimiento_personas(objFiltro.reconocimiento_de_personas);
 					}
-					
-
-					
-					/*
-					if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
-					{
-						char tempCHAR[255];
-						GetWindowTextA(txt_path, tempCHAR, 255);
-						if(strcmp(tempCHAR, "") != 0)
-							start_record(hWnd, picNormal, picFiltrada, opcion_elegida, tempCHAR);
-					}
-					else
-					{
-						start_record(hWnd, picNormal, picFiltrada, opcion_elegida, "");
-					}*/
-					//imgMnt = cambiarPic();
-					//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)imgMnt);
 					break;
 				}
 				case BTN_CAPTURAR:
 				{
 					dbx_filtrado.capturar = !dbx_filtrado.capturar;
-					if(dbx_filtrado.capturar)
-						SetWindowTextA(btn_capturar, "Capturar de nuevo");
+					if (dbx_filtrado.capturar)
+						
+						SetWindowTextA(btn_capturar, objFiltro.statMSG[objFiltro.capturar_de_nuevo].nombre);
 					else
-						SetWindowTextA(btn_capturar, "Capturar");
+						SetWindowTextA(btn_capturar, objFiltro.statMSG[objFiltro.capturar].nombre);
 
 					EnableWindow(btn_guardar_normal, true);
 					EnableWindow(btn_guardar_filtrada, true);
@@ -254,38 +276,22 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					}else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
 					{
 						path = getPathToVideo(hWnd);
-						//strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
-						//path_s = path;
-						//SetWindowTextA(txt_path, pathCHAR);
 						SetWindowTextA(txt_path, path.c_str());
-						//MessageBoxA(0, path.c_str(), "", 0);
 					}
 					
 					if (path != "")
 					{
-						//char pathCHAR[255];
-						//strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
-						//SetWindowTextA(txt_path, (LPCSTR)pathCHAR);
 						SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
 						EnableWindow(btn_guardar_normal, true);
-						EnableWindow(btn_guardar_filtrada, true);
-						
-						
+						EnableWindow(btn_guardar_filtrada, true);	
 						if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
 						{
-							
 							obtener_imagen_archivo(path, objFiltro.cargar_imagen_desde_archivo);
 						}
 						else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
-						{
-							
+						{	
 							obtener_video_archivo(path, objFiltro.cargar_video_desde_archivo);
 						}
-						
-						//start_record(hWnd, picNormal, picFiltrada, objFiltro.cargar_imagen_desde_archivo, pathCHAR);
-						//ctrl_filtros::modes::imagen_desde_archivo(pathCHAR);
-						//picNormal.setImagen((HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 300, 300, LR_LOADFROMFILE));
-						//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)picNormal.getImagen());
 					}
 					else
 						MessageBoxA(0, "Direccion vacia", "Cargar", 0);
@@ -298,10 +304,9 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
 					char pathCHAR[255];
 					GetWindowTextA(txt_path, pathCHAR, 255);
-					MessageBoxA(0, pathCHAR, "", 0);
+					//MessageBoxA(0, pathCHAR, "", 0);
 					if (strcmp(pathCHAR, "") != 0)
 					{
-						
 						SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
 						EnableWindow(btn_guardar_normal, true);
 						EnableWindow(btn_guardar_filtrada, true);
@@ -315,20 +320,9 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						{
 							obtener_video_archivo(pathCHAR, objFiltro.cargar_video_desde_archivo);
 						}
-
-						//start_record(hWnd, picNormal, picFiltrada, objFiltro.cargar_imagen_desde_archivo, pathCHAR);
-						//ctrl_filtros::modes::imagen_desde_archivo(pathCHAR);
-						//picNormal.setImagen((HBITMAP)LoadImage(NULL, path, IMAGE_BITMAP, 300, 300, LR_LOADFROMFILE));
-						//SendDlgItemMessage(hWnd, PIC_VIDEOCAMERA, STM_SETIMAGE, IMAGE_BITMAP, (LPARAM)picNormal.getImagen());
 					}
 					else
 						MessageBoxA(0, "Direccion vacia", "Cargar", 0);
-
-					
-					/*
-					char pathCHAR[255];
-					GetWindowTextA(txt_path, pathCHAR, 255);
-					cargar_imagen(pathCHAR);*/
 					break;
 				}
 				
@@ -361,9 +355,15 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					{
 						dbx_filtrado.guardar_vid_original = !dbx_filtrado.guardar_vid_original;
 						if (dbx_filtrado.guardar_vid_original)
-							SetWindowTextA(btn_guardar_normal, "Grabando...");
+						{
+							SetWindowTextA(btn_guardar_normal, objFiltro.statMSG[objFiltro.grabando_video_original].nombre);// "Grabando...");
+							dbx_filtrado.estado_vid_original = 1;
+						}
 						else
-							SetWindowTextA(btn_guardar_normal, "Dejar de grabar");
+						{
+							SetWindowTextA(btn_guardar_normal, objFiltro.statMSG[objFiltro.detener_grabado_original].nombre);//"Dejar de grabar");
+							dbx_filtrado.estado_vid_original = 2;
+						}
 					}
 						
 					break;
@@ -385,9 +385,9 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					{
 						dbx_filtrado.guardar_vid_filtrada = !dbx_filtrado.guardar_vid_filtrada;
 						if (dbx_filtrado.guardar_vid_filtrada)
-							SetWindowTextA(btn_guardar_filtrada, "Grabando...");
+							SetWindowTextA(btn_guardar_filtrada, objFiltro.statMSG[objFiltro.grabando_video_filtrado].nombre);// "Grabando...");
 						else
-							SetWindowTextA(btn_guardar_filtrada, "Dejar de grabar");
+							SetWindowTextA(btn_guardar_filtrada, objFiltro.statMSG[objFiltro.detener_grabado_filtrado].nombre);//"Dejar de grabar");
 
 					}
 					break;

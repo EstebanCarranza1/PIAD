@@ -56,10 +56,24 @@ public:
 		pathFiltro,
 		noDisponible
 	};
+	static enum statMSG
+	{
+		vacio, 
+		iniciar_grabado_original,
+		iniciar_grabado_filtrado,
+		detener_grabado_original,
+		detener_grabado_filtrado,
+		grabando,
+		capturar,
+		capturar_de_nuevo,
+		grabando_video_original,
+		grabando_video_filtrado
+	};
 	static const int max_nomFiltro = 18;
 	static const int max_formaFiltrado = 6;
 	static const int max_mensajes = 8;
 	static const int max_recMSG = 4;
+	static const int max_static_messages = 10;
 	struct propiedades
 	{
 		char titulo[255];
@@ -78,6 +92,11 @@ public:
 	{
 		char nombre[255];
 	}recMSG[max_recMSG];
+
+	struct static_messages
+	{
+		char nombre[255];
+	}statMSG[max_static_messages];
 
 	void inicializar_nombres()
 	{
@@ -99,10 +118,7 @@ public:
 		strcpy_s(propFiltro[15].titulo, "Direccion Este Oeste");
 		strcpy_s(propFiltro[16].titulo, "Repujado");
 		strcpy_s(propFiltro[17].titulo, "Sharpening");
-
-
 		
-
 		strcpy_s(formaFiltrado[0].nombre, "<< NO SELECCIONAR NINGUNO >>");
 		strcpy_s(formaFiltrado[1].nombre, "Filtro - Cargar imagen desde archivo");
 		strcpy_s(formaFiltrado[2].nombre, "Filtro - Cargar imagen desde camara");
@@ -119,12 +135,22 @@ public:
 		strcpy_s(filterMSG[6].nombre, "IMAGEN CARGADA CON EXITO");
 		strcpy_s(filterMSG[7].nombre, "CARGADANDO IMAGEN");
 
-
 		strcpy_s(recMSG[0].nombre, "Direccion de la imagen: ");
 		strcpy_s(recMSG[1].nombre, "Personas reconocidas: ");
 		strcpy_s(recMSG[2].nombre, "Filtro: ");
 		strcpy_s(recMSG[3].nombre, "N/D");
 
+		strcpy_s(statMSG[0].nombre, "");
+		strcpy_s(statMSG[1].nombre, "Iniciar grabado original");
+		strcpy_s(statMSG[2].nombre, "Iniciar grabado filtrado");
+		strcpy_s(statMSG[3].nombre, "Guardando original");
+		strcpy_s(statMSG[4].nombre, "Guardando filtrado");
+		strcpy_s(statMSG[5].nombre, "Grabando..");
+		strcpy_s(statMSG[6].nombre, "Capturar");
+		strcpy_s(statMSG[7].nombre, "Capturar de nuevo");
+		strcpy_s(statMSG[8].nombre, "Grabando original..");
+		strcpy_s(statMSG[9].nombre, "Grabando filtrado..");
+		
 
 
 	}

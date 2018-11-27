@@ -13,6 +13,7 @@
 #include "mod.filtro.h"
 #include "ctrl_multimedia.h"
 #include "mod.saveData.h"
+#include "VideoGrabador.h"
 #define E 2.71828182845904523536;
 # define M_PI 3.14159265358979323846;  /* pi */
 
@@ -366,7 +367,7 @@ void cargar_imagen(cv::String path)
 		MessageBoxA(0, "No se pudo cargar la imagen :c", "", 0);
 }
 bool cameraOpen = false;
-
+VideoGrabador *graba;
 void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 {
 	//de lo leido por la camara obtenemos la cantidad de
@@ -419,7 +420,7 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 	}
 	else dbx_filtrado.cerrar_dialogo = true;
 				
-	if (objFiltro.cargar_imagen_desde_archivo || objFiltro.cargar_imagen_desde_camara)
+	if (formaFiltrado == objFiltro.cargar_imagen_desde_archivo || formaFiltrado == objFiltro.cargar_imagen_desde_camara)
 	{
 		if (dbx_filtrado.guardar_img_original)
 		{
@@ -443,7 +444,20 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 			}
 			else MessageBoxA(0, "Elegir donde quiere guardar la imagen", "Guardar imagen", 0);
 		}
-	}
+	}/*
+	else if (formaFiltrado == objFiltro.cargar_video_desde_archivo || formaFiltrado == objFiltro.cargar_video_desde_camara)
+	{
+		if (dbx_filtrado.guardar_vid_original)
+		{
+			graba->Graba(frame);
+		}
+		else
+		{
+			if(graba!=NULL)
+				graba->SalidaDeVideo.release();
+		}
+		
+	}*/
 }
 
 void obtener_imagen_archivo(std::string path, int formaFiltrado)
@@ -540,9 +554,70 @@ void obtener_video_archivo(std::string path, int formaFiltrado)
 		}
 	}
 }
+Mat frameClone;
+float time = 0;
 void obtener_video_desde_camara(int formaFiltrado)
 {
+	
+	dbx_filtrado.cerrar_dialogo = false;
+	Mat frame, frame2;
+	VideoCapture camara(0);
+	bool pathActivado = false;
+	
+	if (!camara.isOpened())  // si no se pudo ahi muere, lastima!
+	{
+		cout << "No se pudo abrir la camara" << endl;
+		return;
+	}
+	
+	while (1)
+	{
+		if (!dbx_filtrado.capturar)
+		{
+			bool exito = camara.read(frame); // lee un frame
+			
+			if (dbx_filtrado.estado_vid_original == 1)
+			{
+				if (!pathActivado)
+				{
+					pathActivado = true;
+					std:string path = getPathToSaveVideo(0);
+					if (path != "")
+					{
+						char pathCHAR[255];
+						strcpy_s(pathCHAR, path.c_str());
+						graba = new VideoGrabador(0, pathCHAR, camara.get(CV_CAP_PROP_FOURCC), camara.get(CV_CAP_PROP_FRAME_WIDTH),
+							camara.get(CV_CAP_PROP_FRAME_HEIGHT), 30);
+						dbx_filtrado.estado_vid_original == 4;
+					}
+					
+				}
+				
+			}
+			
+			if (!exito) //si no se pudo lastima de nuevo
+			{
+				cout << "no pude leer!" << endl;
+				break;
+			}
+		}
+		filtrar(frame, frame2, objFiltro.cargar_video_desde_camara);
+		
+		
+			
+		
+		
+	
 
+
+		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
+		{
+			cvDestroyWindow("Imagen sin filtrar");
+			cvDestroyWindow("Imagen filtrada");
+			camara.release();
+			break;
+		}
+	}
 }
 int escala = 3;
 void reconocimiento_personas(int formaFiltrado)
