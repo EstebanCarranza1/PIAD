@@ -89,32 +89,99 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		}
 		case WM_TIMER:
 		{
-			char tempCHAR[255];
-			char tempMSGCHAR[255];
-			itoa(dbx_filtrado.personas_detectadas, tempCHAR, 10);
-			strcpy_s(tempMSGCHAR, "");
-			strcat_s(tempMSGCHAR, "Personas encontradas ");
-			strcat_s(tempMSGCHAR, tempCHAR);
-			SetWindowTextA(txt_mensajes, tempMSGCHAR);
+			char tempForma[255];
+			char tempMSG[255];
+			SendMessageA(cbx_forma, CB_GETLBTEXT, SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0), (LPARAM)tempForma);
 
-			if (dbx_filtrado.estado_vid_original == 4)
+			if (
+				(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.reconocimiento_de_personas_desde_camara].nombre) == 0) ||
+				(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.reconocimiento_de_personas_desde_imagen].nombre) == 0)
+				)
 			{
-				
-				if ((frameClone.dims>0) && (graba != NULL))
-					graba->Graba(frameClone);
-				
+				char tempCHAR[255];
+				char tempMSGCHAR[255];
+				itoa(dbx_filtrado.personas_detectadas, tempCHAR, 10);
+				strcpy_s(tempMSGCHAR, "");
+				strcat_s(tempMSGCHAR, "Personas encontradas ");
+				strcat_s(tempMSGCHAR, tempCHAR);
+				SetWindowTextA(txt_mensajes, tempMSGCHAR);
 			}
-			else if (dbx_filtrado.estado_vid_original == 2)
+			else if (
+				(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_archivo].nombre) == 0) ||
+				(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].nombre) == 0)
+				)
 			{
-				if (graba != NULL && dbx_filtrado.estado_vid_original != 0)
+				if (dbx_filtrado.estado_vid_original == 1)
 				{
-					dbx_filtrado.estado_vid_original = 0;
-					graba->SalidaDeVideo.release();
-					MessageBox(0, "Grabado", "grabado", 0);
-					
+
+					if ((frameClone.dims>0) && (graba != NULL))
+						graba->Graba(frameClone);
+
 				}
+				else if (dbx_filtrado.estado_vid_original == 2)
+				{
+					if (graba != NULL && dbx_filtrado.estado_vid_original != 0)
+					{
+						dbx_filtrado.estado_vid_original = 0;
+						graba->SalidaDeVideo.release();
+						pathActivado = false;
+						
+						MessageBox(0, "Grabado", "grabado", 0);
+
+					}
+				}
+				if (dbx_filtrado.estado_vid_filtrada == 1)
+				{
+
+					if ((frameClone2.dims>0) && (grabaF != NULL))
+						grabaF->Graba(frameClone2);
+
+				}
+				else if (dbx_filtrado.estado_vid_filtrada == 2)
+				{
+					if (grabaF != NULL && dbx_filtrado.estado_vid_filtrada != 0)
+					{
+						dbx_filtrado.estado_vid_filtrada = 0;
+						grabaF->SalidaDeVideo.release();
+						pathActivadoF = false;
+						MessageBox(0, "Grabado", "grabado", 0);
+
+					}
+				}
+				
+				if (dbx_filtrado.estado_vid_desde_archivo_filtrado == 1)
+				{
+					if ((frame_desde_archivo_filtrado.dims>0) && (graba_desde_archivo_filtrado != NULL))
+						graba_desde_archivo_filtrado->Graba(frame_desde_archivo_filtrado);
+				}
+				else if (dbx_filtrado.estado_vid_desde_archivo_filtrado == 2)
+				{
+					if (graba_desde_archivo_filtrado != NULL && dbx_filtrado.estado_vid_desde_archivo_filtrado != 0)
+					{
+						dbx_filtrado.estado_vid_desde_archivo_filtrado = 0;
+						graba_desde_archivo_filtrado->SalidaDeVideo.release();
+						path_activado_desde_archivo_filtrado = false;
+						MessageBox(0, "Grabado", "grabado", 0);
+					}
+				}
+				if (dbx_filtrado.estado_vid_desde_archivo_original == 1)
+				{
+					if ((frame_desde_archivo_original.dims>0) && (graba_desde_archivo_original != NULL))
+						graba_desde_archivo_original->Graba(frame_desde_archivo_original);
+				}
+				else if (dbx_filtrado.estado_vid_desde_archivo_original == 2)
+				{
+					if (graba_desde_archivo_original != NULL && dbx_filtrado.estado_vid_desde_archivo_original != 0)
+					{
+						dbx_filtrado.estado_vid_desde_archivo_original = 0;
+						graba_desde_archivo_original->SalidaDeVideo.release();
+						path_activado_desde_archivo_filtrado = false;
+						MessageBox(0, "Grabado", "grabado", 0);
+					}
+				}
+				time++;
 			}
-			//time++;
+			
 			break;
 		}
 		case WM_COMMAND:
@@ -426,17 +493,21 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				
 				case BTN_GUARDAR_NORMAL:
 				{
-					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+					//FORMA FILTRADO		
+					char tempForma[255];
+					char tempMSG[255];
+					SendMessageA(cbx_forma, CB_GETLBTEXT, SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0), (LPARAM)tempForma);
 					if (
-						opcion_elegida == objFiltro.cargar_imagen_desde_archivo ||
-						opcion_elegida == objFiltro.cargar_imagen_desde_camara
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_archivo].nombre) == 0) ||
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].nombre) == 0)
 						)
 					{
 						dbx_filtrado.guardar_img_original = true;
 					}
 					else if (
-						opcion_elegida == objFiltro.cargar_video_desde_archivo ||
-						opcion_elegida == objFiltro.cargar_video_desde_camara
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_archivo].nombre) == 0) ||
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].nombre) == 0)
+						
 						)
 					{
 						dbx_filtrado.guardar_vid_original = !dbx_filtrado.guardar_vid_original;
@@ -456,24 +527,37 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 				case BTN_GUARDAR_FILTRADA:
 				{	
+					//FORMA FILTRADO		
+					char tempForma[255];
+					char tempMSG[255];
+					SendMessageA(cbx_forma, CB_GETLBTEXT, SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0), (LPARAM)tempForma);
 					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
 					if (
-						opcion_elegida == objFiltro.cargar_imagen_desde_archivo ||
-						opcion_elegida == objFiltro.cargar_imagen_desde_camara
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_archivo].nombre) == 0) ||
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].nombre) == 0)
+						
 						)
 					{
 						dbx_filtrado.guardar_img_filtrada = true;
 					}
 					else if (
-						opcion_elegida == objFiltro.cargar_video_desde_archivo ||
-						opcion_elegida == objFiltro.cargar_video_desde_camara
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_archivo].nombre) == 0) ||
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].nombre) == 0)
+						
 						)
 					{
 						dbx_filtrado.guardar_vid_filtrada = !dbx_filtrado.guardar_vid_filtrada;
 						if (dbx_filtrado.guardar_vid_filtrada)
+						{
 							SetWindowTextA(btn_guardar_filtrada, objFiltro.statMSG[objFiltro.grabando_video_filtrado].nombre);// "Grabando...");
+							dbx_filtrado.estado_vid_filtrada = 1;
+						}
 						else
+						{
 							SetWindowTextA(btn_guardar_filtrada, objFiltro.statMSG[objFiltro.detener_grabado_filtrado].nombre);//"Dejar de grabar");
+							dbx_filtrado.estado_vid_filtrada = 2;
+						}
+							
 
 					}
 					break;

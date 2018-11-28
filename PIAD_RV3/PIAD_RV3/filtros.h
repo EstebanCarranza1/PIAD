@@ -367,7 +367,13 @@ void cargar_imagen(cv::String path)
 		MessageBoxA(0, "No se pudo cargar la imagen :c", "", 0);
 }
 bool cameraOpen = false;
-VideoGrabador *graba;
+VideoGrabador *graba,*grabaF, *graba_desde_archivo_original, *graba_desde_archivo_filtrado;
+Mat frameClone, frameClone2, frame_desde_archivo_original, frame_desde_archivo_filtrado;
+float time = 0;
+bool pathActivado = false;
+bool pathActivadoF = false;
+bool path_activado_desde_archivo_original = false;
+bool path_activado_desde_archivo_filtrado = false;
 void mantener_activado()
 {
 	for (int i = 0; i < objFiltro.max_nomFiltro; i++)
@@ -375,7 +381,7 @@ void mantener_activado()
 			objFiltro.propFiltro[i].activado = objFiltro.propFiltro[i].mantener;
 
 }
-void filtrar(Mat frame, Mat frame2, int formaFiltrado)
+Mat filtrar(Mat frame, Mat frame2, int formaFiltrado)
 {
 	//de lo leido por la camara obtenemos la cantidad de
 	//canales, 3 por ser rgb
@@ -407,6 +413,7 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 			sepia(p, q, j, objFiltro.propFiltro[objFiltro.flt_sepia].activado);
 		}
 	}
+	
 	media(objFiltro.propFiltro[objFiltro.flt_media].activado, &frame2);
 	mediaPonderada(objFiltro.propFiltro[objFiltro.flt_mediaPonderada].activado, &frame2);
 	gausiano( objFiltro.propFiltro[objFiltro.flt_gaussiano].activado, &frame2);
@@ -469,6 +476,7 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 		}
 		
 	}*/
+	return frame2;
 }
 
 void obtener_imagen_archivo(std::string path, int formaFiltrado)
@@ -544,7 +552,7 @@ void obtener_video_archivo(std::string path, int formaFiltrado)
 	CvCapture* capture = NULL;
 	capture = cvCreateFileCapture(path.c_str());
 	IplImage* frameVid = NULL;
-	Mat frame, frame2;
+	Mat frame, frame2, auxFrame2;
 	Mat resize;
 	while (1)
 	{
@@ -556,7 +564,32 @@ void obtener_video_archivo(std::string path, int formaFiltrado)
 		frame = resize.clone();
 		//iniciar_filtrado = true;
 		frame2 = frame.clone();
-		filtrar(frame, frame2, objFiltro.cargar_video_desde_archivo);
+		auxFrame2 = filtrar(frame, frame2, objFiltro.cargar_video_desde_archivo);
+		/*
+		if (dbx_filtrado.estado_vid_desde_archivo_filtrado == 1)
+		{
+			if (!path_activado_desde_archivo_filtrado)
+			{
+				path_activado_desde_archivo_filtrado = true;
+				string path2 = getPathToSaveVideo(0);
+				if (path2 != "")
+				{
+					char pathCHAR[255];
+					strcpy_s(pathCHAR, path2.c_str());
+					graba_desde_archivo_filtrado = new VideoGrabador(0, pathCHAR, camara.get(CV_CAP_PROP_FOURCC), camara.get(CV_CAP_PROP_FRAME_WIDTH),
+						camara.get(CV_CAP_PROP_FRAME_HEIGHT), 30);
+					//dbx_filtrado.estado_vid_original == 4;
+				}
+			}
+		}
+		if (dbx_filtrado.estado_vid_filtrada == 1 && pathActivadoF)
+		{
+			if (time > 1)
+			{
+				frameClone2 = auxFrame2.clone();
+				time = 0;
+			}
+		}*/
 		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
 		{
 			cvDestroyWindow("Imagen sin filtrar");
@@ -565,59 +598,77 @@ void obtener_video_archivo(std::string path, int formaFiltrado)
 		}
 	}
 }
-Mat frameClone;
-float time = 0;
+
 void obtener_video_desde_camara(int formaFiltrado)
 {
 	
 	dbx_filtrado.cerrar_dialogo = false;
-	Mat frame, frame2;
+	Mat frame, frame2, auxFrame2;
 	VideoCapture camara(0);
-	bool pathActivado = false;
-	
 	if (!camara.isOpened())  // si no se pudo ahi muere, lastima!
 	{
 		cout << "No se pudo abrir la camara" << endl;
 		return;
 	}
-	
 	while (1)
 	{
-		
 		bool exito = camara.read(frame); // lee un frame
-
 		if (!exito) //si no se pudo lastima de nuevo
 		{
 			cout << "no pude leer!" << endl;
 			break;
 		}
-		
-
+		auxFrame2 = filtrar(frame, frame2, objFiltro.cargar_video_desde_camara);
+	
 		if (dbx_filtrado.estado_vid_original == 1)
 		{
 			if (!pathActivado)
 			{
 				pathActivado = true;
-			std:string path = getPathToSaveVideo(0);
+				std:string path = getPathToSaveVideo(0);
 				if (path != "")
 				{
 					char pathCHAR[255];
 					strcpy_s(pathCHAR, path.c_str());
 					graba = new VideoGrabador(0, pathCHAR, camara.get(CV_CAP_PROP_FOURCC), camara.get(CV_CAP_PROP_FRAME_WIDTH),
 						camara.get(CV_CAP_PROP_FRAME_HEIGHT), 30);
-					dbx_filtrado.estado_vid_original == 4;
+					//dbx_filtrado.estado_vid_original == 4;
 				}
-
 			}
 		}
-		filtrar(frame, frame2, objFiltro.cargar_video_desde_camara);
-		
-		if (dbx_filtrado.estado_vid_original == 4)
+		if (dbx_filtrado.estado_vid_original == 1 && pathActivado)
 		{
-			frameClone = frame.clone();
+			if (time > 1)
+			{
+				frameClone = frame.clone();
+				time = 0;
+			}
 		}
-			
-		
+		if (dbx_filtrado.estado_vid_filtrada == 1)
+		{
+			if (!pathActivadoF)
+			{
+				pathActivadoF = true;
+				string path2 = getPathToSaveVideo(0);
+				if (path2 != "")
+				{
+					char pathCHAR[255];
+					strcpy_s(pathCHAR, path2.c_str());
+					grabaF = new VideoGrabador(0, pathCHAR, camara.get(CV_CAP_PROP_FOURCC), camara.get(CV_CAP_PROP_FRAME_WIDTH),
+						camara.get(CV_CAP_PROP_FRAME_HEIGHT), 30);
+					//dbx_filtrado.estado_vid_original == 4;
+				}
+			}
+		}
+		if (dbx_filtrado.estado_vid_filtrada== 1 && pathActivadoF)
+		{
+			if (time > 1)
+			{
+				frameClone2 = auxFrame2.clone();
+				time = 0;
+			}
+		}
+
 		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
 		{
 			cvDestroyWindow("Imagen sin filtrar");
