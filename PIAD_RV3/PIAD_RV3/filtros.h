@@ -368,6 +368,13 @@ void cargar_imagen(cv::String path)
 }
 bool cameraOpen = false;
 VideoGrabador *graba;
+void mantener_activado()
+{
+	for (int i = 0; i < objFiltro.max_nomFiltro; i++)
+		if (objFiltro.propFiltro[i].mantener)
+			objFiltro.propFiltro[i].activado = objFiltro.propFiltro[i].mantener;
+
+}
 void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 {
 	//de lo leido por la camara obtenemos la cantidad de
@@ -386,6 +393,7 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 	//punteros para manejar a la imagen
 	uchar *p, *q;
 	int chanelsRGB = 3;
+	mantener_activado();
 	for (i = 0; i < nRows; i++)
 	{
 		p = frame.ptr<uchar>(i);
@@ -415,7 +423,10 @@ void filtrar(Mat frame, Mat frame2, int formaFiltrado)
 	if (frame.dims > 0 && frame2.dims > 0)
 	{
 		imshow("Imagen sin filtrar", frame);
-		if (formaFiltrado != objFiltro.reconocimiento_de_personas)
+		if (
+				formaFiltrado != objFiltro.reconocimiento_de_personas_desde_imagen || 
+				formaFiltrado != objFiltro.reconocimiento_de_personas_desde_camara
+			)
 			imshow("Imagen filtrada", frame2);
 	}
 	else dbx_filtrado.cerrar_dialogo = true;
@@ -572,44 +583,41 @@ void obtener_video_desde_camara(int formaFiltrado)
 	
 	while (1)
 	{
-		if (!dbx_filtrado.capturar)
+		
+		bool exito = camara.read(frame); // lee un frame
+
+		if (!exito) //si no se pudo lastima de nuevo
 		{
-			bool exito = camara.read(frame); // lee un frame
-			
-			if (dbx_filtrado.estado_vid_original == 1)
+			cout << "no pude leer!" << endl;
+			break;
+		}
+		
+
+		if (dbx_filtrado.estado_vid_original == 1)
+		{
+			if (!pathActivado)
 			{
-				if (!pathActivado)
+				pathActivado = true;
+			std:string path = getPathToSaveVideo(0);
+				if (path != "")
 				{
-					pathActivado = true;
-					std:string path = getPathToSaveVideo(0);
-					if (path != "")
-					{
-						char pathCHAR[255];
-						strcpy_s(pathCHAR, path.c_str());
-						graba = new VideoGrabador(0, pathCHAR, camara.get(CV_CAP_PROP_FOURCC), camara.get(CV_CAP_PROP_FRAME_WIDTH),
-							camara.get(CV_CAP_PROP_FRAME_HEIGHT), 30);
-						dbx_filtrado.estado_vid_original == 4;
-					}
-					
+					char pathCHAR[255];
+					strcpy_s(pathCHAR, path.c_str());
+					graba = new VideoGrabador(0, pathCHAR, camara.get(CV_CAP_PROP_FOURCC), camara.get(CV_CAP_PROP_FRAME_WIDTH),
+						camara.get(CV_CAP_PROP_FRAME_HEIGHT), 30);
+					dbx_filtrado.estado_vid_original == 4;
 				}
-				
-			}
-			
-			if (!exito) //si no se pudo lastima de nuevo
-			{
-				cout << "no pude leer!" << endl;
-				break;
+
 			}
 		}
 		filtrar(frame, frame2, objFiltro.cargar_video_desde_camara);
 		
-		
+		if (dbx_filtrado.estado_vid_original == 4)
+		{
+			frameClone = frame.clone();
+		}
 			
 		
-		
-	
-
-
 		if (waitKey(16) == 27 || dbx_filtrado.cerrar_dialogo)
 		{
 			cvDestroyWindow("Imagen sin filtrar");
@@ -620,7 +628,7 @@ void obtener_video_desde_camara(int formaFiltrado)
 	}
 }
 int escala = 3;
-void reconocimiento_personas(int formaFiltrado)
+void reconocimiento_personas_desde_camara(int formaFiltrado)
 {
 	dbx_filtrado.cerrar_dialogo = false;
 	cv::VideoCapture camara(0); //camara basica, si usan una muy grande
@@ -635,7 +643,7 @@ void reconocimiento_personas(int formaFiltrado)
 
 	hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector()); //Se carga el Support Vector Machine
 
-	namedWindow("Detector de Racita", 1); //Creamos la ventana para despliegue
+	namedWindow("Reconocimiento de personas", 1); //Creamos la ventana para despliegue
 
 	camara.read(img); //leemos la camara para detectar la dimension de la imagen que da la camara
 
@@ -699,10 +707,226 @@ void reconocimiento_personas(int formaFiltrado)
 		//lo tipico
 		if (waitKey(10) >= 40 || dbx_filtrado.cerrar_dialogo)
 		{ 
-			cvDestroyWindow("Detector de Racita");
+			cvDestroyWindow("Reconocimiento de personas");
 			break;
 		}
 			
-		imshow("Detector de Racita", img);
+		imshow("Reconocimiento de personas", img);
+	}
+}
+void reconocimiento_personas_desde_imagen(string path, int formaFiltrado)
+{
+	dbx_filtrado.cerrar_dialogo = false;
+	bool iniciar_filtrado = false;
+	Mat img;
+	img = NULL; 
+	img = mod_multimedia::imagen::LoadOfPC(path);
+	//cv::resize(img, img, Size(640, 480), 0, 0, INTER_CUBIC);
+	HOGDescriptor hog; //Histograma de Gradientes Orientados
+
+	hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector()); //Se carga el Support Vector Machine
+	
+
+	namedWindow("Reconocimiento de personas", 1); //Creamos la ventana para despliegue
+
+	Mat aux(img.rows / escala, img.cols / escala, CV_8U); //generamos dos imagenes reducidas en un tercio por lado o sea
+	Mat aux2(img.rows / escala, img.cols / escala, CV_8U);//un noveno de tamaño para acelerar su proceso
+
+	for (;;) //ciclo eterno
+	{
+		//modificamos el tamaño
+		resize(img, aux, aux.size(), 0, 0, INTER_LINEAR);
+		//convertimos de color a gris
+		cvtColor(aux, aux2, CV_BGR2GRAY);
+		//si no hay imagen adios!
+		if (!img.data)
+			continue;
+		//generamos un arreglo de rectangulo para encuadrar a la racita
+		vector<Rect> found, found_filtered;
+		//le agregamos estilo para medir el tiempo de proceso, importante esta tecnica para
+		//medir el desempeño
+		double t = (double)getTickCount();
+		//le pedimos que haga el trabajo de detectar
+		hog.detectMultiScale(aux2, found, 0, Size(8, 8), Size(16, 16), 0.1, 1.5);
+		
+		//tiempo total de proceso
+		t = (double)getTickCount() - t;
+		//imprimelo, sino pa'que
+		printf("tdetection time = %gms\n", t*1000. / cv::getTickFrequency());
+		//contador de los ciclos para la cantidad de hallazgos
+		size_t i, j;
+		//comienza el ciclo
+		for (i = 0; i < found.size(); i++)
+		{
+			//genera al primer rectangulo de los hallados
+			Rect r = found[i];
+			//checa si no se repiten lso rectangulos
+			for (j = 0; j < found.size(); j++)
+				if (j != i && (r & found[j]) == r)
+					break;
+			//si se acabo el arreglo lo mete al final del otro arreglo
+			//este solo tendra rectangulos no repetidos
+			if (j == found.size())
+				found_filtered.push_back(r);
+		}
+		dbx_filtrado.personas_detectadas = found_filtered.size();
+		//de los hallados, a dibujar
+		for (i = 0; i < found_filtered.size(); i++)
+		{
+			//dibuja el primero de los filtrados
+			Rect r = found_filtered[i];
+			//dibujemos el rectangulo un poco mas grande de lo normal
+			//pa que la racita no quede mal encuadrada, el 3 es de la
+			//reduccion que habiamos hecho, estamos compensando
+			r.x *= escala;
+			r.x += cvRound(r.width*0.1);
+			r.width = cvRound(r.width*0.8*escala);
+			r.y = r.y*escala;
+			r.y += cvRound(r.height*0.07);
+			r.height = cvRound(r.height*0.8*escala);
+			rectangle(img, r.tl(), r.br(), cv::Scalar(0, 255, 0), 3);
+		}
+		//lo tipico
+		if (waitKey(10) >= 40 || dbx_filtrado.cerrar_dialogo)
+		{
+			cvDestroyWindow("Reconocimiento de personas");
+			break;
+		}
+
+		imshow("Reconocimiento de personas", img);
+	}
+}
+
+void mostrar_histograma_desde_camara()
+{
+	dbx_filtrado.cerrar_dialogo = false;
+	Mat src, dst;
+	VideoCapture cam(0);
+
+	/// Separate the image in 3 places ( B, G and R )
+	vector<Mat> bgr_planes;
+
+
+	/// Establish the number of bins
+	int histSize = 256;
+
+	/// Set the ranges ( for B,G,R) )
+	float range[] = { 0, 256 };
+	const float* histRange = { range };
+
+	bool uniform = true; bool accumulate = false;
+
+	Mat b_hist, g_hist, r_hist;
+	while (1)
+	{
+		cam.read(src);
+		split(src, bgr_planes);
+		/// Compute the histograms:
+		calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate);
+		calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate);
+		calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate);
+
+		// Draw the histograms for B, G and R
+		int hist_w = 512; int hist_h = 400;
+		int bin_w = cvRound((double)hist_w / histSize);
+
+		Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
+
+		/// Normalize the result to [ 0, histImage.rows ]
+		normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
+		normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
+		normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
+
+		/// Draw for each channel
+		for (int i = 1; i < histSize; i++)
+		{
+			line(histImage, Point(bin_w*(i - 1), hist_h - cvRound(b_hist.at<float>(i - 1))),
+				Point(bin_w*(i), hist_h - cvRound(b_hist.at<float>(i))),
+				Scalar(255, 0, 0), 2, 8, 0);
+			line(histImage, Point(bin_w*(i - 1), hist_h - cvRound(g_hist.at<float>(i - 1))),
+				Point(bin_w*(i), hist_h - cvRound(g_hist.at<float>(i))),
+				Scalar(0, 255, 0), 2, 8, 0);
+			line(histImage, Point(bin_w*(i - 1), hist_h - cvRound(r_hist.at<float>(i - 1))),
+				Point(bin_w*(i), hist_h - cvRound(r_hist.at<float>(i))),
+				Scalar(0, 0, 255), 2, 8, 0);
+		}
+		imshow("calcHist Demo", histImage);
+		imshow("Foto original", src);
+		//lo tipico
+		if (waitKey(10) >= 40 || dbx_filtrado.cerrar_dialogo)
+		{
+			cvDestroyWindow("calcHist Demo");
+			cvDestroyWindow("Foto original");
+			break;
+		}
+
+
+	}
+}
+
+void mostrar_histograma_desde_imagen(string path)
+{
+	dbx_filtrado.cerrar_dialogo = false;
+	Mat src, dst;
+	
+	src = mod_multimedia::imagen::LoadOfPC(path);
+	/// Separate the image in 3 places ( B, G and R )
+	vector<Mat> bgr_planes;
+
+
+	/// Establish the number of bins
+	int histSize = 256;
+
+	/// Set the ranges ( for B,G,R) )
+	float range[] = { 0, 256 };
+	const float* histRange = { range };
+
+	bool uniform = true; bool accumulate = false;
+
+	Mat b_hist, g_hist, r_hist;
+	while (1)
+	{
+		
+		split(src, bgr_planes);
+		/// Compute the histograms:
+		calcHist(&bgr_planes[0], 1, 0, Mat(), b_hist, 1, &histSize, &histRange, uniform, accumulate);
+		calcHist(&bgr_planes[1], 1, 0, Mat(), g_hist, 1, &histSize, &histRange, uniform, accumulate);
+		calcHist(&bgr_planes[2], 1, 0, Mat(), r_hist, 1, &histSize, &histRange, uniform, accumulate);
+
+		// Draw the histograms for B, G and R
+		int hist_w = 512; int hist_h = 400;
+		int bin_w = cvRound((double)hist_w / histSize);
+
+		Mat histImage(hist_h, hist_w, CV_8UC3, Scalar(0, 0, 0));
+
+		/// Normalize the result to [ 0, histImage.rows ]
+		normalize(b_hist, b_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
+		normalize(g_hist, g_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
+		normalize(r_hist, r_hist, 0, histImage.rows, NORM_MINMAX, -1, Mat());
+
+		/// Draw for each channel
+		for (int i = 1; i < histSize; i++)
+		{
+			line(histImage, Point(bin_w*(i - 1), hist_h - cvRound(b_hist.at<float>(i - 1))),
+				Point(bin_w*(i), hist_h - cvRound(b_hist.at<float>(i))),
+				Scalar(255, 0, 0), 2, 8, 0);
+			line(histImage, Point(bin_w*(i - 1), hist_h - cvRound(g_hist.at<float>(i - 1))),
+				Point(bin_w*(i), hist_h - cvRound(g_hist.at<float>(i))),
+				Scalar(0, 255, 0), 2, 8, 0);
+			line(histImage, Point(bin_w*(i - 1), hist_h - cvRound(r_hist.at<float>(i - 1))),
+				Point(bin_w*(i), hist_h - cvRound(r_hist.at<float>(i))),
+				Scalar(0, 0, 255), 2, 8, 0);
+		}
+		imshow("calcHist Demo", histImage);
+		imshow("Foto original", src);
+		//lo tipico
+		if (waitKey(10) >= 40 || dbx_filtrado.cerrar_dialogo)
+		{
+			cvDestroyWindow("calcHist Demo");
+			cvDestroyWindow("Foto original");
+			break;
+		}
+
+
 	}
 }

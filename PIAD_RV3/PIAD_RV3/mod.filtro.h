@@ -28,7 +28,6 @@ public:
 		flt_sepia,
 		flt_media,
 		flt_mediaPonderada,
-		flt_mediana,
 		flt_gaussiano,
 		flt_sustraccionMedia,
 		flt_laplaciano,
@@ -47,7 +46,11 @@ public:
 		cargar_imagen_desde_camara,
 		cargar_video_desde_archivo,
 		cargar_video_desde_camara,
-		reconocimiento_de_personas
+		reconocimiento_de_personas_desde_camara,
+		reconocimiento_de_personas_desde_imagen,
+		histograma_desde_camara,
+		histograma_desde_imagen,
+		histograma_desde_video
 	};
 	static enum recMSG
 	{
@@ -69,15 +72,16 @@ public:
 		grabando_video_original,
 		grabando_video_filtrado
 	};
-	static const int max_nomFiltro = 18;
-	static const int max_formaFiltrado = 6;
-	static const int max_mensajes = 8;
+	static const int max_nomFiltro = 17;
+	static const int max_formaFiltrado = 10;
+	static const int max_mensajes = 9;
 	static const int max_recMSG = 4;
 	static const int max_static_messages = 10;
 	struct propiedades
 	{
 		char titulo[255];
-		bool activado = false;	
+		bool activado = false;
+		bool mantener = false;
 	}propFiltro[max_nomFiltro];
 	struct tipoFiltrado
 	{
@@ -107,25 +111,29 @@ public:
 		strcpy_s(propFiltro[4].titulo, "Efecto Sepia");
 		strcpy_s(propFiltro[5].titulo, "Filtro de la media");
 		strcpy_s(propFiltro[6].titulo, "Filtro de la media ponderada");
-		strcpy_s(propFiltro[7].titulo, "Filtro de la mediana");
-		strcpy_s(propFiltro[8].titulo, "Filtro gaussiano");
-		strcpy_s(propFiltro[9].titulo, "Filtro sustracción de la media");
-		strcpy_s(propFiltro[10].titulo, "Filtro laplaciano");
-		strcpy_s(propFiltro[11].titulo, "Filtro sobel C");
-		strcpy_s(propFiltro[12].titulo, "Filtro sobel F");
-		strcpy_s(propFiltro[13].titulo, "Menos laplaciano");
-		strcpy_s(propFiltro[14].titulo, "Direccion Norte Sur");
-		strcpy_s(propFiltro[15].titulo, "Direccion Este Oeste");
-		strcpy_s(propFiltro[16].titulo, "Repujado");
-		strcpy_s(propFiltro[17].titulo, "Sharpening");
+		strcpy_s(propFiltro[7].titulo, "Filtro gaussiano");
+		strcpy_s(propFiltro[8].titulo, "Filtro sustracción de la media");
+		strcpy_s(propFiltro[9].titulo, "Filtro laplaciano");
+		strcpy_s(propFiltro[10].titulo, "Filtro sobel C");
+		strcpy_s(propFiltro[11].titulo, "Filtro sobel F");
+		strcpy_s(propFiltro[12].titulo, "Menos laplaciano");
+		strcpy_s(propFiltro[13].titulo, "Direccion Norte Sur");
+		strcpy_s(propFiltro[14].titulo, "Direccion Este Oeste");
+		strcpy_s(propFiltro[15].titulo, "Repujado");
+		strcpy_s(propFiltro[16].titulo, "Sharpening");
+		
 		
 		strcpy_s(formaFiltrado[0].nombre, "<< NO SELECCIONAR NINGUNO >>");
 		strcpy_s(formaFiltrado[1].nombre, "Filtro - Cargar imagen desde archivo");
 		strcpy_s(formaFiltrado[2].nombre, "Filtro - Cargar imagen desde camara");
 		strcpy_s(formaFiltrado[3].nombre, "Filtro - Cargar video desde archivo");
 		strcpy_s(formaFiltrado[4].nombre, "Filtro - Video desde camara");
-		strcpy_s(formaFiltrado[5].nombre, "Reconocimiento de personas");
-		
+		strcpy_s(formaFiltrado[5].nombre, "Reconocimiento de personas desde camara");
+		strcpy_s(formaFiltrado[6].nombre, "Reconocimiento de personas desde imagen");
+		strcpy_s(formaFiltrado[7].nombre, "Mostrar histograma desde camara");
+		strcpy_s(formaFiltrado[8].nombre, "Mostrar histograma desde imagen");
+		strcpy_s(formaFiltrado[9].nombre, "Mostrar histograma desde video");
+
 		strcpy_s(filterMSG[0].nombre, "<< NO SELECCIONAR NINGUNO >>");
 		strcpy_s(filterMSG[1].nombre, "ABRE LA CÁMARA PARA COMENZAR");
 		strcpy_s(filterMSG[2].nombre, "ELIGE UNA FORMA DE FILTRADO");
@@ -134,6 +142,8 @@ public:
 		strcpy_s(filterMSG[5].nombre, "CAMARA INICIADA - ELIGE UNA FORMA DE FILTRADO");
 		strcpy_s(filterMSG[6].nombre, "IMAGEN CARGADA CON EXITO");
 		strcpy_s(filterMSG[7].nombre, "CARGADANDO IMAGEN");
+		strcpy_s(filterMSG[8].nombre, "SE FIJO ");
+
 
 		strcpy_s(recMSG[0].nombre, "Direccion de la imagen: ");
 		strcpy_s(recMSG[1].nombre, "Personas reconocidas: ");

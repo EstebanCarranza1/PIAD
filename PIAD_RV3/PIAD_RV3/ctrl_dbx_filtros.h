@@ -89,6 +89,14 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 		}
 		case WM_TIMER:
 		{
+			char tempCHAR[255];
+			char tempMSGCHAR[255];
+			itoa(dbx_filtrado.personas_detectadas, tempCHAR, 10);
+			strcpy_s(tempMSGCHAR, "");
+			strcat_s(tempMSGCHAR, "Personas encontradas ");
+			strcat_s(tempMSGCHAR, tempCHAR);
+			SetWindowTextA(txt_mensajes, tempMSGCHAR);
+
 			if (dbx_filtrado.estado_vid_original == 4)
 			{
 				
@@ -123,6 +131,7 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					char tempForma[255];
 					char tempMSG[255];
 					SendMessageA(cbx_forma, CB_GETLBTEXT, SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0), (LPARAM)tempForma);
+
 					for (int i = 0; i < objFiltro.max_formaFiltrado; i++)
 					{
 						if (strcmp(tempForma, objFiltro.formaFiltrado[i].nombre) == 0)
@@ -133,7 +142,7 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 							SetWindowTextA(txt_mensajes, (LPCSTR)tempMSG);
 						}
 					}
-					if (objFiltro.formaFiltrado[objFiltro.ninguno].activado)
+					if (strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.ninguno].nombre)==0)
 					{
 						dbx_filtrado.cerrar_dialogo = true;
 						habilitar_todo(false);
@@ -141,32 +150,36 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						SetWindowTextA(lbl_filtro, objFiltro.recMSG[objFiltro.pathFiltro].nombre);
 						SetWindowTextA(txt_path, "");
 						
-					}else if (objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_archivo].activado || 
-						objFiltro.formaFiltrado[objFiltro.cargar_video_desde_archivo].activado)
+					}else if (
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_archivo].nombre) == 0) ||
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_archivo].nombre) == 0)
+						)
 					{
 						dbx_filtrado.cerrar_dialogo = true;
 						habilitar_todo(false);
 						EnableWindow(txt_path, true);
-						EnableWindow(btn_recargar, true);
+						
 						EnableWindow(btn_examinar, true);
-						EnableWindow(cbx_filtros, true);
+						
 						SetWindowTextA(lbl_path, objFiltro.recMSG[objFiltro.pathImagen].nombre);
 						SetWindowTextA(lbl_filtro, objFiltro.recMSG[objFiltro.pathFiltro].nombre);
 						SetWindowTextA(txt_path, "");
-					}else if (objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].activado || 
-						objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].activado)
+					}else if (
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].nombre) == 0) ||
+						(strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].nombre) == 0) 
+						)
 					{
 						dbx_filtrado.cerrar_dialogo = true;
-						habilitar_todo(true);
+						habilitar_todo(false);
 						EnableWindow(btn_iniciar_camara, true);
-						if(objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].activado)
+						if((strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].nombre) == 0))
 							EnableWindow(btn_capturar, true);
 						
 						EnableWindow(cbx_filtros, true);
 						SetWindowTextA(lbl_path, objFiltro.recMSG[objFiltro.pathImagen].nombre);
 						SetWindowTextA(lbl_filtro, objFiltro.recMSG[objFiltro.pathFiltro].nombre);
 						SetWindowTextA(txt_path, "");
-					}else if (objFiltro.formaFiltrado[objFiltro.reconocimiento_de_personas].activado)
+					}else if ((strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.reconocimiento_de_personas_desde_camara].nombre) == 0))
 					{
 						dbx_filtrado.cerrar_dialogo = true;
 						habilitar_todo(false);
@@ -175,6 +188,25 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						SetWindowTextA(lbl_path, objFiltro.recMSG[objFiltro.personasReconocidas].nombre);
 						SetWindowTextA(txt_path, "0");
 						SetWindowTextA(lbl_filtro, objFiltro.recMSG[objFiltro.noDisponible].nombre);
+					}
+					else if ((strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.reconocimiento_de_personas_desde_imagen].nombre) == 0) )
+					{
+						dbx_filtrado.cerrar_dialogo = true;
+						habilitar_todo(false);
+						
+						EnableWindow(btn_examinar, true);
+						
+					}
+					else if ((strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.histograma_desde_camara].nombre) == 0))
+					{
+						habilitar_todo(false);
+						EnableWindow(btn_iniciar_camara, true);
+						
+					}
+					else if ((strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.histograma_desde_imagen].nombre) == 0))
+					{
+						habilitar_todo(false);
+						EnableWindow(btn_examinar, true);
 					}
 					break;
 				}
@@ -204,6 +236,8 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					{
 						EnableWindow(btn_configurar_filtro, false);
 						EnableWindow(btn_aplicar_filtro, false);
+						for (int i = 0; i < objFiltro.max_nomFiltro; i++)
+							objFiltro.propFiltro[i].mantener = false;
 					}
 					else
 					{
@@ -217,27 +251,39 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 				case BTN_INICIAR_CAMARA:
 				{
-					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+					char tempFiltros[255];
+					char tempMSG[255];
+					SendMessageA(cbx_forma, CB_GETLBTEXT, SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0), (LPARAM)tempFiltros);
+
+					
+					//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
 					SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
-					if (objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].activado)
+					if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].nombre)==0)
 					{
 						EnableWindow(btn_guardar_normal, true);
 						EnableWindow(btn_guardar_filtrada, true);
 						SetWindowTextA(btn_guardar_normal, objFiltro.statMSG[objFiltro.iniciar_grabado_original].nombre);
 						SetWindowTextA(btn_guardar_filtrada, objFiltro.statMSG[objFiltro.iniciar_grabado_filtrado].nombre);
 					}
-					if (opcion_elegida == objFiltro.cargar_imagen_desde_camara)
+					if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].nombre)==0)
 					{
 						obtener_imagen_desde_camara();
 					}
-					else if (opcion_elegida == objFiltro.cargar_video_desde_camara)
+					else if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].nombre) == 0)
 					{
 						obtener_video_desde_camara(objFiltro.cargar_video_desde_camara);
 					}
-					else if (opcion_elegida == objFiltro.reconocimiento_de_personas)
+					else if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.reconocimiento_de_personas_desde_camara].nombre) == 0)
 					{
-						reconocimiento_personas(objFiltro.reconocimiento_de_personas);
+						reconocimiento_personas_desde_camara(objFiltro.reconocimiento_de_personas_desde_camara);
 					}
+					
+					else if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.histograma_desde_camara].nombre) == 0)
+					{
+						mostrar_histograma_desde_camara();
+					}
+					
+						
 					break;
 				}
 				case BTN_CAPTURAR:
@@ -261,37 +307,51 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 				case BTN_EXAMINAR:
 				{
-					//char pathCHAR[255];
-					int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
-					//LPCWSTR path = NULL;
-					//LPCSTR str;// = existingstr.c_str();
+					char tempFiltros[255];
+					char tempMSG[255];
+					SendMessageA(cbx_forma, CB_GETLBTEXT, SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0), (LPARAM)tempFiltros);
+
+
+					//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+					SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
+					//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
 					std:string path = "";
-					if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo) //objFiltro.cargar_imagen_desde_camara)
-					{
-						 path = getPathToImage(hWnd);
-						 //strcpy_s(pathCHAR, convertLPCWSTRtoCHAR(path));
-						 //SetWindowTextA(txt_path, pathCHAR);
-						 SetWindowTextA(txt_path, path.c_str());
-						// MessageBoxA(0, path.c_str(), "", 0);
-					}else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
-					{
-						path = getPathToVideo(hWnd);
-						SetWindowTextA(txt_path, path.c_str());
-					}
+					path = getPathToImage(hWnd);
+					SetWindowTextA(txt_path, path.c_str());
 					
 					if (path != "")
 					{
-						SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
-						EnableWindow(btn_guardar_normal, true);
-						EnableWindow(btn_guardar_filtrada, true);	
-						if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
+						EnableWindow(btn_recargar, true);
+						
+						if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_archivo].nombre) == 0)
 						{
+							EnableWindow(cbx_filtros, true);
+							SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
+							EnableWindow(btn_guardar_normal, true);
+							EnableWindow(btn_guardar_filtrada, true);	
 							obtener_imagen_archivo(path, objFiltro.cargar_imagen_desde_archivo);
 						}
-						else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
+						else if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_archivo].nombre) == 0)
 						{	
+							EnableWindow(cbx_filtros, true);
+							SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
+							EnableWindow(btn_guardar_normal, true);
+							EnableWindow(btn_guardar_filtrada, true);
 							obtener_video_archivo(path, objFiltro.cargar_video_desde_archivo);
 						}
+						else if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.reconocimiento_de_personas_desde_imagen].nombre) == 0)
+						{
+							//EnableWindow(btn_iniciar_camara, true);
+							SetWindowTextA(btn_iniciar_camara, "Comenzar reconocimiento");
+							/*char tempCHAR[255];
+							GetWindowText(txt_path, tempCHAR, 255);*/
+							reconocimiento_personas_desde_imagen(path, objFiltro.reconocimiento_de_personas_desde_imagen);
+						}
+						else if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.histograma_desde_imagen].nombre) == 0)
+						{
+							mostrar_histograma_desde_imagen(path);
+						}
+
 					}
 					else
 						MessageBoxA(0, "Direccion vacia", "Cargar", 0);
@@ -307,19 +367,26 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					//MessageBoxA(0, pathCHAR, "", 0);
 					if (strcmp(pathCHAR, "") != 0)
 					{
-						SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
-						EnableWindow(btn_guardar_normal, true);
-						EnableWindow(btn_guardar_filtrada, true);
-
-
+						
 						if (opcion_elegida == objFiltro.cargar_imagen_desde_archivo)
 						{
+							SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
+							EnableWindow(btn_guardar_normal, true);
+							EnableWindow(btn_guardar_filtrada, true);
 							obtener_imagen_archivo(pathCHAR, objFiltro.cargar_imagen_desde_archivo);
 						}
 						else if (opcion_elegida == objFiltro.cargar_video_desde_archivo)
 						{
+							SetWindowTextA(txt_mensajes, (LPCSTR)objFiltro.filterMSG[0].nombre);
+							EnableWindow(btn_guardar_normal, true);
+							EnableWindow(btn_guardar_filtrada, true);
 							obtener_video_archivo(pathCHAR, objFiltro.cargar_video_desde_archivo);
 						}
+						else if (opcion_elegida == objFiltro.reconocimiento_de_personas_desde_imagen)
+						{
+							reconocimiento_personas_desde_imagen(pathCHAR, objFiltro.reconocimiento_de_personas_desde_imagen);
+						}
+					
 					}
 					else
 						MessageBoxA(0, "Direccion vacia", "Cargar", 0);
@@ -329,12 +396,31 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				case BTN_APLICAR_FILTRO:
 				{
 					
-					//calculate_sigma(0.1, matSigma);
-					//int c = 0;
-					//mat();
-					//DialogBox(dbx_menu.hInst, MAKEINTRESOURCE(DBX_CONSOLE), NULL, reinterpret_cast<DLGPROC>(call_console));
-					//lbx_console = GetDlgItem(hWnd_dbx_console, LBX_CONSOLE);
-					//SendMessageA(lbx_console, LB_INSERTSTRING, 0, (LPARAM)"ctrl_dbx_filtros");
+					char tempFiltros[255];
+					char tempMSG[255];
+					SendMessageA(cbx_filtros, CB_GETLBTEXT, SendMessageA(cbx_filtros, CB_GETCURSEL, 0, 0), (LPARAM)tempFiltros);
+
+					for (int i = 0; i < objFiltro.max_nomFiltro; i++)
+					{
+						if (strcmp(tempFiltros, objFiltro.propFiltro[i].titulo) == 0)
+						{
+							
+							objFiltro.propFiltro[i].activado = true;
+							strcpy_s(tempMSG, objFiltro.filterMSG[8].nombre);
+							strcat_s(tempMSG, objFiltro.propFiltro[i].titulo);
+							SetWindowTextA(txt_mensajes, (LPCSTR)tempMSG);
+							objFiltro.propFiltro[i].mantener = true;
+							char tempCHAR[255];
+							strcpy_s(tempCHAR, "");
+							strcat_s(tempCHAR, "Filtro ");
+							strcat_s(tempCHAR, objFiltro.propFiltro[i].titulo);
+							strcat_s(tempCHAR, " fijado");
+							MessageBoxA(0, tempCHAR, "Filtro fijado", 0);
+							
+						}
+
+					}
+					
 					break;
 				}
 				

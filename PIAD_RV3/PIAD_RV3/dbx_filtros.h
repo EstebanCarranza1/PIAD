@@ -16,5 +16,6 @@ class mod_dialogBox
 	bool guardar_vid_filtrada = false;
 	bool guardar_vid_original = false;
 	int estado_vid_original = 0;
+	int personas_detectadas = 0;
 	//virtual LRESULT CALLBACK callback(HWND, UINT, WPARAM, LPARAM);
 };
