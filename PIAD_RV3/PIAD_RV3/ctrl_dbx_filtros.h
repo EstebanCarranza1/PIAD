@@ -239,8 +239,11 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 						dbx_filtrado.cerrar_dialogo = true;
 						habilitar_todo(false);
 						EnableWindow(btn_iniciar_camara, true);
-						if((strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].nombre) == 0))
+						if ((strcmp(tempForma, objFiltro.formaFiltrado[objFiltro.cargar_imagen_desde_camara].nombre) == 0))
+						{
 							EnableWindow(btn_capturar, true);
+						}
+						
 						
 						EnableWindow(cbx_filtros, true);
 						SetWindowTextA(lbl_path, objFiltro.recMSG[objFiltro.pathImagen].nombre);
@@ -279,6 +282,7 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 				}
 				case CBX_FILTROS:
 				{
+					
 					//NOMBRE FILTRADO
 					for (int i = 0; i < objFiltro.max_nomFiltro; i++)
 					{
@@ -287,7 +291,7 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					char tempFiltros[255];
 					char tempMSG[255];
 					SendMessageA(cbx_filtros, CB_GETLBTEXT, SendMessageA(cbx_filtros, CB_GETCURSEL, 0, 0), (LPARAM)tempFiltros);
-
+					
 					for (int i = 0; i < objFiltro.max_nomFiltro; i++)
 					{
 						if (strcmp(tempFiltros, objFiltro.propFiltro[i].titulo) == 0)
@@ -327,7 +331,7 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
 					if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_camara].nombre)==0)
 					{
-						EnableWindow(btn_guardar_normal, true);
+						EnableWindow(btn_guardar_normal, false);
 						EnableWindow(btn_guardar_filtrada, true);
 						SetWindowTextA(btn_guardar_normal, objFiltro.statMSG[objFiltro.iniciar_grabado_original].nombre);
 						SetWindowTextA(btn_guardar_filtrada, objFiltro.statMSG[objFiltro.iniciar_grabado_filtrado].nombre);
@@ -378,13 +382,25 @@ LRESULT CALLBACK call_filtrado(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 					char tempMSG[255];
 					SendMessageA(cbx_forma, CB_GETLBTEXT, SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0), (LPARAM)tempFiltros);
 
-
-					//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
-					SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
-					//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
-					std:string path = "";
-					path = getPathToImage(hWnd);
-					SetWindowTextA(txt_path, path.c_str());
+				std:string path = "";
+					if (strcmp(tempFiltros, objFiltro.formaFiltrado[objFiltro.cargar_video_desde_archivo].nombre) == 0)
+					{
+						//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+						SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
+						//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+					
+						path = getPathToVideo(hWnd);
+						SetWindowTextA(txt_path, path.c_str());
+					}
+					else
+					{
+						//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+						SetWindowTextA(txt_mensajes, (LPCSTR)(objFiltro.filterMSG[3].nombre));
+						//int opcion_elegida = SendMessageA(cbx_forma, CB_GETCURSEL, 0, 0);
+						path = getPathToImage(hWnd);
+						SetWindowTextA(txt_path, path.c_str());
+					}
+					
 					
 					if (path != "")
 					{

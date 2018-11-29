@@ -73,7 +73,7 @@ public:
 		grabando_video_filtrado
 	};
 	static const int max_nomFiltro = 17;
-	static const int max_formaFiltrado = 10;
+	static const int max_formaFiltrado = 9;
 	static const int max_mensajes = 9;
 	static const int max_recMSG = 4;
 	static const int max_static_messages = 10;
@@ -132,7 +132,7 @@ public:
 		strcpy_s(formaFiltrado[6].nombre, "Reconocimiento de personas desde imagen");
 		strcpy_s(formaFiltrado[7].nombre, "Mostrar histograma desde camara");
 		strcpy_s(formaFiltrado[8].nombre, "Mostrar histograma desde imagen");
-		strcpy_s(formaFiltrado[9].nombre, "Mostrar histograma desde video");
+		//strcpy_s(formaFiltrado[9].nombre, "Mostrar histograma desde video");
 
 		strcpy_s(filterMSG[0].nombre, "<< NO SELECCIONAR NINGUNO >>");
 		strcpy_s(filterMSG[1].nombre, "ABRE LA CÁMARA PARA COMENZAR");

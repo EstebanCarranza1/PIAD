@@ -39,15 +39,15 @@ c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(57): warning C4091: 'static ': s
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(36): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(38): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(40): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(431): warning C4244: 'inicializando': conversión de 'LRESULT' a 'int'; posible pérdida de datos
-c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(534): warning C4244: 'inicializando': conversión de 'LRESULT' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(444): warning C4244: 'inicializando': conversión de 'LRESULT' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(547): warning C4244: 'inicializando': conversión de 'LRESULT' a 'int'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(87): warning C4060: la instrucción switch no contiene etiquetas 'case' ni 'default'
-c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(385): warning C4102: 'std': etiqueta sin referencia
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(382): warning C4102: 'std': etiqueta sin referencia
 c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(93): warning C4101: 'tempMSG': variable local sin referencia
-c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(322): warning C4101: 'tempMSG': variable local sin referencia
-c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(378): warning C4101: 'tempMSG': variable local sin referencia
-c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(498): warning C4101: 'tempMSG': variable local sin referencia
-c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(532): warning C4101: 'tempMSG': variable local sin referencia
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(323): warning C4101: 'tempMSG': variable local sin referencia
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(379): warning C4101: 'tempMSG': variable local sin referencia
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(511): warning C4101: 'tempMSG': variable local sin referencia
+c:\github\piad\piad_rv3\piad_rv3\ctrl_dbx_filtros.h(545): warning C4101: 'tempMSG': variable local sin referencia
 c:\github\piad\piad_rv3\piad_rv3\convert.h(28): warning C4172: devolución de dirección de la variable local o temporal: charArray
 c:\github\piad\piad_rv3\piad_rv3\convert.h(16): warning C4172: devolución de dirección de la variable local o temporal: Char
   PIAD_RV3.vcxproj -> C:\GitHub\PIAD\PIAD_RV3\x64\Debug\PIAD_RV3.exe

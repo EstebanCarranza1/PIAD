@@ -1,0 +1,11 @@
+C:\Windows\system32\api-ms-win-crt-convert-l1-1-0.dll
+C:\Windows\system32\api-ms-win-crt-heap-l1-1-0.dll
+C:\Windows\system32\api-ms-win-crt-locale-l1-1-0.dll
+C:\Windows\system32\api-ms-win-crt-math-l1-1-0.dll
+C:\Windows\system32\api-ms-win-crt-runtime-l1-1-0.dll
+C:\Windows\system32\api-ms-win-crt-stdio-l1-1-0.dll
+C:\Windows\system32\api-ms-win-crt-string-l1-1-0.dll
+C:\Windows\system32\COMDLG32.dll
+C:\Windows\system32\MSVCP140.dll
+C:\Windows\system32\opencv_world310.dll
+C:\Windows\system32\VCRUNTIME140.dll
