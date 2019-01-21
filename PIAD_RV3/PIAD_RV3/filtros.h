@@ -739,6 +739,7 @@ void reconocimiento_personas_desde_camara(int formaFiltrado)
 			if (j == found.size())
 				found_filtered.push_back(r);
 		}
+		dbx_filtrado.personas_detectadas = found_filtered.size();
 		//de los hallados, a dibujar
 		for (i = 0; i < found_filtered.size(); i++)
 		{

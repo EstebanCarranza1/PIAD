@@ -33,7 +33,8 @@ c:\github\piad\piad_rv3\piad_rv3\filtros.h(308): warning C4244: '=': conversión
 c:\github\piad\piad_rv3\piad_rv3\filtros.h(634): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\filtros.h(658): warning C4244: 'argumento': conversión de 'double' a 'int'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\filtros.h(628): warning C4102: 'std': etiqueta sin referencia
-c:\github\piad\piad_rv3\piad_rv3\filtros.h(823): warning C4267: '=': conversión de 'size_t' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(742): warning C4267: '=': conversión de 'size_t' a 'int'; posible pérdida de datos
+c:\github\piad\piad_rv3\piad_rv3\filtros.h(824): warning C4267: '=': conversión de 'size_t' a 'int'; posible pérdida de datos
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(55): warning C4091: 'static ': se ha omitido a la izquierda de 'ctrl_filtros::modes' cuando no hay ninguna variable declarada
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(57): warning C4091: 'static ': se ha omitido a la izquierda de 'ctrl_filtros' cuando no hay ninguna variable declarada
 c:\github\piad\piad_rv3\piad_rv3\ctrl_filtros.h(36): warning C4244: '=': conversión de 'double' a 'uchar'; posible pérdida de datos
